@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export interface UseExampleStateResult<T> {
   data: T | null;
@@ -7,13 +7,9 @@ export interface UseExampleStateResult<T> {
 }
 
 export function useExampleState<T>(initialData: T | null = null): UseExampleStateResult<T> {
-  const [data, setData] = useState<T | null>(initialData);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    setData(initialData);
-  }, [initialData]);
+  const [data] = useState<T | null>(initialData);
+  const [isLoading] = useState(false);
+  const [error] = useState<string | null>(null);
 
   return {
     data,

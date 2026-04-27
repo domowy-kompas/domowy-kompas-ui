@@ -1,3 +1,4 @@
+import type { ReactElement } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { Dashboard } from './pages/Dashboard'
@@ -5,7 +6,7 @@ import { Transactions } from './pages/Transactions'
 import { Budgets } from './pages/Budgets'
 import { Goals, Reports, Help } from './pages/Misc'
 
-function App() {
+function App(): ReactElement {
   return (
     <BrowserRouter>
       <Layout>

@@ -1,217 +1,157 @@
 # AI Agent Guidelines — domowy-kompas-ui
 
-React + TypeScript frontend application built with Vite, tested with Vitest, and linted with ESLint.
+React + TypeScript frontend built with Vite, tested with Vitest, linted with ESLint.
 
-## Quick Reference
+## Commands
 
-### Essential Commands
-- **Dev server**: `npm run dev` (Vite HMR on http://localhost:5173)
+- **Dev**: `npm run dev` (Vite HMR on http://localhost:5173)
 - **Build**: `npm run build` (TypeScript check + Vite build to `dist/`)
-- **Test**: `npm run test` (Vitest, one run)
-- **Single test**: `npx vitest run src/path/to/Test.test.tsx` or `--testNamePattern` for specific test names
-- **Test watch**: `npm run test:watch` (Vitest watch mode)
+- **Test all**: `npm run test` (Vitest, single run)
+- **Single test file**: `npx vitest run src/pages/Dashboard.tsx` or `npm run test -- --run src/pages/Dashboard.tsx`
+- **Single test by name**: `npx vitest run --testNamePattern="test name"`
+- **Test watch**: `npm run test:watch`
 - **Lint**: `npm run lint` (ESLint flat config)
-- **Preview**: `npm run preview` (serve built `dist/`)
+- **Preview**: `npm run preview`
 
-### Tech Stack
-- **React 19** with hooks-based components (no class components)
-- **React Router v6** for client-side routing
-- **TypeScript ~6.0** with strict type checking
+## Tech Stack
+
+- **React 19** with hooks (no class components)
+- **React Router v7** for client-side routing
+- **TypeScript ~6.0** with strict mode (`tsconfig.app.json`)
 - **Vite 8** for bundling and HMR
-- **Vitest 4** with jsdom environment for DOM testing
-- **Testing Library** for component testing (React Testing Library + jest-dom)
+- **Vitest 4** with jsdom environment
+- **Testing Library** (React Testing Library + jest-dom)
 - **ESLint 10** with React hooks/refresh rules
 
 ## Project Structure
 
-### Pages vs Components
-- **Pages** (`src/pages/`): Route-based components that define full views
-- **Components** (`src/components/`): Reusable UI elements (buttons, cards, nav, etc.)
-
 ```
 src/
 ├── App.tsx              # Root component with Routes
-├── main.tsx             # Entry point (createRoot + BrowserRouter)
+├── main.tsx             # Entry point (createRoot + BrowserRouter + StrictMode)
 ├── index.css            # Global styles
-├── App.css              # Component-scoped styles
+├── App.css              # App-level styles
 ├── pages/               # Route-based page components
-│   ├── Login.tsx
-│   ├── Login.test.tsx
 │   ├── Dashboard.tsx
-│   └── Dashboard.test.tsx
+│   ├── Transactions.tsx
+│   ├── Budgets.tsx
+│   └── Misc.tsx         # Goals, Reports, Help exports
 ├── components/          # Reusable UI components
-│   ├── Navigation.tsx
-│   └── Navigation.test.tsx
+│   ├── Layout.tsx       # Wrapper with Sidebar + Footer
+│   ├── Sidebar.tsx      # Navigation with NavLink
+│   └── Footer.tsx
 ├── test/
 │   └── setup.ts         # Vitest setup (jest-dom matchers)
 └── assets/              # Images, icons, SVGs
 ```
 
-## Code Style Guidelines
+## Code Style
 
 ### Imports
-- **React imports**: `import { useState, useEffect } from 'react'`
-- **Framework imports**: `import { render, screen } from '@testing-library/react'`
-- **Router imports**: `import { Link, useNavigate } from 'react-router-dom'`
-- **Group order**: React → testing-library → react-router → third-party → local (./*) → local (../*)
-- **Named exports** preferred; default exports only for page components
+- **React**: `import { useState } from 'react'` (destructured, not `import React`)
+- **Type imports**: `import type { ReactNode } from 'react'`
+- **Router**: `import { NavLink } from 'react-router-dom'`
+- **Group order**: React → react-router → testing-library → third-party → local
+- **Named exports** preferred; default export only for App
 
 ### Formatting
-- **Prettier**: Not configured (run `npm run lint` for formatting issues)
-- **Indentation**: 2 spaces (match existing code)
-- **Line length**: No hard limit; break at logical points
-- **Trailing commas**: Allowed where helpful
+- **No Prettier**: Rely on `npm run lint` and consistent manual formatting
+- **Indentation**: 2 spaces
+- **Quotes**: Single quotes preferred
+- **Semicolons**: Omit (check existing code style)
 
 ### Type Safety
-- **Always provide explicit return types** for functions: `function getName(): string { ... }`
-- **Props types**: Explicit interface/type for component props
-- **Avoid `any`**: Use `unknown` with type guards, or specific types
-- **Strict mode**: Enabled in TypeScript (no implicit any)
-- **Non-null assertion**: Avoid `!`; use conditional chaining or null checks
+- **Explicit return types** for functions: `function getName(): string { ... }`
+- **Props interfaces**: `interface LayoutProps { children: ReactNode }`
+- **Avoid `any`**: Use `unknown` with type guards or specific types
+- **Strict mode enabled**: `strict: true` in tsconfig.app.json
+- **No non-null assertion**: Avoid `!`; use conditional checks
 
 ### Naming Conventions
-- **Components**: PascalCase (`MyComponent.tsx`)
-- **Files**: kebab-case for non-components (`login-page.tsx`), PascalCase for components
-- **Hooks**: camelCase starting with `use` (`useAuth`, `useCounter`)
-- **Props interfaces**: `InterfaceNameProps` (`ButtonProps`)
+- **Components**: PascalCase (`Dashboard.tsx`, `Sidebar.tsx`)
+- **Files**: PascalCase for components, kebab-case for utils
+- **Hooks**: camelCase starting with `use`
+- **Props interfaces**: `ComponentNameProps` (`LayoutProps`)
 - **Test files**: `.test.tsx` suffix, co-located with source
 - **Constants**: SCREAMING_SNAKE_CASE for config values
-- **Variables**: camelCase
 
-### Functional Components
+### Components
 ```tsx
-interface MyComponentProps {
-  title: string;
-  onSubmit: (data: Data) => void;
+import type { ReactNode } from 'react'
+import './Layout.css'
+
+interface LayoutProps {
+  children: ReactNode
 }
 
-export function MyComponent({ title, onSubmit }: MyComponentProps) {
-  const [value, setValue] = useState('')
-
-  function handleSubmit() {
-    onSubmit({ value })
-  }
-
+export function Layout({ children }: LayoutProps) {
   return (
-    <div>
-      <h1>{title}</h1>
-      <input value={value} onChange={(e) => setValue(e.target.value)} />
-      <button onClick={handleSubmit}>Submit</button>
+    <div className="layout">
+      <Sidebar />
+      <main>{children}</main>
     </div>
   )
 }
 ```
 
-### Error Handling
-- **Error boundaries**: Wrap potentially failing components
-- **Try/catch**: Use for async operations and data fetching
-- **Console errors**: Avoid in production code; use proper error states in UI
-- **User feedback**: Show inline errors in forms; don't rely only on console
+## Routing
 
-### CSS Guidelines
-- **Import CSS inside components**: `import './Component.css'`
-- **Avoid global class collisions**: Use semantic HTML + component-scoped styles
-- **Testing Library queries**: Prefer `getByRole` over class names
+- **React Router v7** with `<BrowserRouter>` in `main.tsx`
+- **Routes defined** in `App.tsx` under `<Routes>`
+- **Navigation**: Use `<NavLink>` from `react-router-dom` (not `<a>` tags)
+- **Active state**: `className={({ isActive }) => isActive ? 'active' : ''}`
 
-## Routing & Navigation
+### Adding a Route
+1. Create page in `src/pages/NewPage.tsx`
+2. Add `<Route path="/new-page" element={<NewPage />} />` in `App.tsx`
+3. Add nav item to `Sidebar.tsx` using `<NavLink>`
+4. Create test file `NewPage.test.tsx` (wrap with `<BrowserRouter>` in tests)
 
-### Tech Stack
-- **React Router v6** for client-side routing
-- `<BrowserRouter>` wrapper in `src/main.tsx` (entry point)
-- **Route definitions**: All routes in `src/App.tsx` under `<Routes>`
-- **Navigation**: Use `<Link>` from `react-router-dom`, not `<a>` tags for internal routes
+## Testing
 
-### Adding a New Route
-1. Create page component in `src/pages/NewPage.tsx`:
-   ```tsx
-   export function NewPage() {
-     return <h1>New Page</h1>
-   }
-   ```
-2. Add route to `src/App.tsx`:
-   ```tsx
-   <Route path="/new-page" element={<NewPage />} />
-   ```
-3. Add navigation link in `src/components/Navigation.tsx`:
-   ```tsx
-   <Link to="/new-page">New Page</Link>
-   ```
-4. Create test file `src/pages/NewPage.test.tsx` (wrap with `<BrowserRouter>` in tests)
+### Setup
+- **Environment**: jsdom (`vite.config.ts`)
+- **Globals**: `true` (describe, it, expect available without imports)
+- **Setup file**: `src/test/setup.ts` loads jest-dom matchers
 
-### Testing Routes
-- Always wrap components using `<Link>` or routing hooks with `<BrowserRouter>` in tests
-- Use `screen.getByRole('link')` to query navigation links
-- To test navigation between routes, use `userEvent` to click links and verify the URL changes via `window.location.pathname`
-
-## Testing & Linting
-
-### Vitest Setup
-- **Environment**: jsdom (DOM APIs available)
-- **Globals**: true (describe, it, expect available without imports)
-- **Setup files**: `src/test/setup.ts` (jest-dom matchers loaded)
-- **Config**: `vite.config.ts`
-
-### Testing Pattern
+### Pattern
 ```tsx
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router-dom'
-import { MyComponent } from './MyComponent'
+import { Dashboard } from './Dashboard'
 
-function renderWithRouter(component: React.ReactElement) {
-  return render(<BrowserRouter>{component}</BrowserRouter>)
+function renderWithRouter(ui: React.ReactElement) {
+  return render(<BrowserRouter>{ui}</BrowserRouter>)
 }
 
-describe('MyComponent', () => {
-  it('renders without crashing', () => {
-    renderWithRouter(<MyComponent title="Test" onSubmit={vi.fn()} />)
-    expect(screen.getByRole('heading')).toHaveTextContent('Test')
-  })
-
-  it('calls onSubmit when button clicked', async () => {
-    const onSubmit = vi.fn()
-    renderWithRouter(<MyComponent title="Test" onSubmit={onSubmit} />)
-
-    await userEvent.click(screen.getByRole('button'))
-    expect(onSubmit).toHaveBeenCalled()
+describe('Dashboard', () => {
+  it('renders heading', () => {
+    renderWithRouter(<Dashboard />)
+    expect(screen.getByRole('heading')).toHaveTextContent('Dashboard')
   })
 })
 ```
 
-### ESLint Rules (eslint.config.js)
-- React hooks rules (`react-hooks/rules-of-hooks`)
-- React Refresh rules (`react-refresh/only-export-components`)
-- TypeScript recommended config (tseslint)
+## ESLint & TypeScript
+
+### ESLint (`eslint.config.js`)
+- `eslint-plugin-react-hooks` (rules-of-hooks, exhaustive-deps)
+- `eslint-plugin-react-refresh` (vite preset)
+- `typescript-eslint` recommended config
 - Run `npm run lint` before commits
 
-### TypeScript (tsconfig.app.json)
-- `strict: true` enabled
-- `noImplicitAny: true`
-- `noImplicitReturns: true`
-- `noUnusedLocals: true`
-- `noUnusedParameters: true`
+### TypeScript (`tsconfig.app.json`)
+- `strict: true`, `noImplicitAny: true`
+- `noUnusedLocals: true`, `noUnusedParameters: true`
+- `verbatimModuleSyntax: true`, `erasableSyntaxOnly: true`
 
 ## Common Pitfalls
 
-1. **Missing dependencies** in hooks: Add to `useEffect` dependency arrays
-2. **Props drilling**: Consider lifting state early or plan for context later
-3. **Forgot to stringify state in JSX**: `{JSON.stringify(state)}` for debugging objects
-4. **Test files not found**: Ensure `.test.tsx` suffix and co-locate with source files
-5. **HMR issues**: Clear browser cache if hot reload doesn't pick up changes
-6. **CSS specificity wars**: Import CSS inside components; avoid global class name collisions
-7. **Forgot `<BrowserRouter>` wrapper**: Routes won't work; component tests will error when rendering components with `<Link>`
-8. **Used `<a>` instead of `<Link>`**: Navigation will cause full page reload instead of client-side routing
-9. **Used `any` type**: Use explicit types or `unknown` with type guards
-10. **Forgot explicit return type**: Functions should have explicit return types
-11. **Route path mismatch**: Verify exact path spelling; "/" and "/foo" are different routes
-12. **Navigation not visible**: Ensure `<Navigation>` is rendered above `<Routes>` in `src/App.tsx`
-
-## Tips for Agents
-
-- **Run tests first** when modifying existing components to catch regressions
-- **Use React DevTools** (install extension) to inspect component state during dev
-- **Check ESLint output** before suggesting code; follow the rules already in place
-- **Prefer TypeScript types** over runtime validation for props
-- **Keep components small**; extract sub-components to keep JSX readable
-- **Use semantic HTML** (button, a, input) for better accessibility and Testing Library queries
-- **Type-check before build**: `npm run build` runs `tsc -b` first
+1. **Missing router wrapper** in tests: Components using `<NavLink>` need `<BrowserRouter>`
+2. **Used `<a>` instead of `<NavLink>`**: Causes full page reload
+3. **`any` type**: Use explicit types or `unknown` with guards
+4. **Missing return types**: Functions should declare return types
+5. **Unused imports/vars**: ESLint will flag; remove before committing
+6. **Assets import**: Use `import img from '../assets/image.png'` for images
+7. **CSS imports**: Place `import './Component.css'` inside component file

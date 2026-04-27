@@ -1,4 +1,6 @@
-export function Transactions() {
+import type { ReactElement } from 'react'
+
+export function Transactions(): ReactElement {
   return (
     <div>
       <h1>Transactions</h1>

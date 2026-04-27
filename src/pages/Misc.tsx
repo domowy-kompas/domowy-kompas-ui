@@ -1,4 +1,6 @@
-export function Goals() {
+import type { ReactElement } from 'react'
+
+export function Goals(): ReactElement {
   return (
     <div>
       <h1>Cele oszczędnościowe</h1>
@@ -7,7 +9,7 @@ export function Goals() {
   )
 }
 
-export function Reports() {
+export function Reports(): ReactElement {
   return (
     <div>
       <h1>Raporty</h1>
@@ -16,7 +18,7 @@ export function Reports() {
   )
 }
 
-export function Help() {
+export function Help(): ReactElement {
   return (
     <div>
       <h1>Pomoc</h1>

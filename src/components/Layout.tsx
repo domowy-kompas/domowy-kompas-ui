@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { ReactElement, ReactNode } from 'react'
 import { Sidebar } from './Sidebar'
 import { Footer } from './Footer'
 import './Layout.css'
@@ -7,7 +7,7 @@ interface LayoutProps {
   children: ReactNode
 }
 
-export function Layout({ children }: LayoutProps) {
+export function Layout({ children }: LayoutProps): ReactElement {
   return (
     <div className="layout">
       <div className="layout-sidebar">

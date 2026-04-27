@@ -1,3 +1,4 @@
+import type { ReactElement } from 'react'
 import { NavLink } from 'react-router-dom'
 import appIcon from '../assets/appIcon.png'
 import panelGlownyWhite from '../assets/sidebar/white/PanelGlowny.png'
@@ -23,7 +24,7 @@ const navItems = [
   { to: '/help', label: 'Pomoc', iconWhite: pomocWhite, iconGreen: pomocGreen },
 ]
 
-export function Sidebar() {
+export function Sidebar(): ReactElement {
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
