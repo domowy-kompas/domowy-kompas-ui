@@ -1,0 +1,30 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.layout-sidebar {
+  flex-shrink: 0;
+  width: 360px;
+  transition: width 0.3s ease;
+}
+
+.layout-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin-left: 0;
+}
+
+.layout-content {
+  flex: 1;
+  padding: 24px;
+  background-color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .layout-sidebar {
+    width: 100px;
+  }
+}

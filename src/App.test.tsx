@@ -3,24 +3,32 @@ import userEvent from '@testing-library/user-event'
 import App from './App'
 
 describe('App', () => {
-  it('renders the main heading', () => {
+  it('renders sidebar with navigation links', () => {
     render(<App />)
 
-    expect(
-      screen.getByRole('heading', {
-        level: 1,
-        name: /get started/i,
-      }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /panel główny/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /transakcje/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /budżety/i })).toBeInTheDocument()
   })
 
-  it('increments counter when button is clicked', async () => {
+  it('renders footer with copyright', () => {
+    render(<App />)
+
+    expect(screen.getByRole('contentinfo')).toHaveTextContent(/domowy kompas/i)
+  })
+
+  it('renders dashboard by default', () => {
+    render(<App />)
+
+    expect(screen.getByRole('heading', { name: /dashboard/i })).toBeInTheDocument()
+  })
+
+  it('navigates to transactions when link clicked', async () => {
     const user = userEvent.setup()
     render(<App />)
 
-    const button = screen.getByRole('button', { name: /count is 0/i })
-    await user.click(button)
+    await user.click(screen.getByRole('link', { name: /transakcje/i }))
 
-    expect(screen.getByRole('button', { name: /count is 1/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /transactions/i })).toBeInTheDocument()
   })
 })
