@@ -5,6 +5,7 @@ import { Dashboard } from './pages/Dashboard'
 import { Transactions } from './pages/Transactions'
 import { Budgets } from './pages/Budgets'
 import { Goals, Reports, Help } from './pages/Misc'
+import { Settings } from './pages/Settings'
 
 function App(): ReactElement {
   return (
@@ -18,6 +19,7 @@ function App(): ReactElement {
           <Route path="/goals" element={<Goals />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/help" element={<Help />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </Layout>
     </BrowserRouter>

@@ -151,6 +151,73 @@
   overflow: hidden;
 }
 
+.sidebar-bottom {
+  margin-top: auto;
+  padding: 16px 0;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-bottom-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  color: #475569;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: left;
+  transition: background-color 0.15s ease;
+}
+
+.sidebar-bottom-btn:hover {
+  background-color: #e2e8f0;
+}
+
+.sidebar-bottom-btn.active {
+  background-color: #ffffff;
+  color: #0f766e;
+}
+
+.sidebar-bottom-btn-primary {
+  background-color: #0f766e;
+  color: #ffffff;
+}
+
+.sidebar-bottom-btn-primary:hover {
+  background-color: #0e6b63;
+}
+
+.sidebar-bottom-btn-primary .nav-icon {
+  filter: brightness(0) invert(1);
+}
+
+.sidebar.collapsed .sidebar-bottom {
+  padding: 16px 0;
+}
+
+.sidebar.collapsed .sidebar-bottom-btn {
+  padding: 14px;
+  justify-content: center;
+}
+
+.sidebar.collapsed .sidebar-bottom .nav-label {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
 @media (max-width: 768px) {
   .sidebar {
     width: 100px;
@@ -170,12 +237,6 @@
 
   .sidebar-titles {
     display: none;
-  }
-
-  .sidebar-icon {
-    width: 32px;
-    height: 32px;
-    padding: 4px;
   }
 
   .sidebar-title {

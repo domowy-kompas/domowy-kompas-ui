@@ -13,6 +13,10 @@ import budzetyGreen from '../assets/sidebar/green/Budzety.png'
 import celeOszczednoscioweGreen from '../assets/sidebar/green/CeleOszczednosciowe.png'
 import raportyGreen from '../assets/sidebar/green/Raporty.png'
 import pomocGreen from '../assets/sidebar/green/Pomoc.png'
+import ustawieniaWhite from '../assets/sidebar/white/Ustawienia.png'
+import ustawieniaGreen from '../assets/sidebar/green/Ustawienia.png'
+import plusIcon from '../assets/plus.png'
+import logoutIcon from '../assets/logout.png'
 import './Sidebar.css'
 
 const navItems = [
@@ -52,6 +56,24 @@ export function Sidebar(): ReactElement {
           </NavLink>
         ))}
       </nav>
+      <div className="sidebar-bottom">
+        <button className="sidebar-bottom-btn sidebar-bottom-btn-primary" onClick={() => alert('Add transaction - TODO')}>
+          <img src={plusIcon} alt="" className="nav-icon" />
+          <span className="nav-label">Nowa transakcja</span>
+        </button>
+        <NavLink to="/settings" className={({ isActive }) => (isActive ? 'sidebar-bottom-btn active' : 'sidebar-bottom-btn')}>
+          {({ isActive }) => (
+            <>
+              <img src={isActive ? ustawieniaGreen : ustawieniaWhite} alt="" className="nav-icon" />
+              <span className="nav-label">Ustawienia</span>
+            </>
+          )}
+        </NavLink>
+        <button className="sidebar-bottom-btn" onClick={() => alert('Logout - TODO')}>
+          <img src={logoutIcon} alt="" className="nav-icon" />
+          <span className="nav-label">Wyloguj</span>
+        </button>
+      </div>
     </aside>
   )
 }
