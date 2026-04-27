@@ -29,20 +29,33 @@ React + TypeScript frontend built with Vite, tested with Vitest, linted with ESL
 src/
 ├── App.tsx              # Root component with Routes
 ├── main.tsx             # Entry point (createRoot + BrowserRouter + StrictMode)
-├── index.css            # Global styles
+├── index.css            # Global styles + auth page styles
 ├── App.css              # App-level styles
 ├── pages/               # Route-based page components
 │   ├── Dashboard.tsx
 │   ├── Transactions.tsx
 │   ├── Budgets.tsx
-│   └── Misc.tsx         # Goals, Reports, Help exports
+│   ├── Misc.tsx         # Goals, Reports, Help exports
+│   ├── Login.tsx       # Login page
+│   └── Register.tsx    # Register page
 ├── components/          # Reusable UI components
-│   ├── Layout.tsx       # Wrapper with Sidebar + Footer
-│   ├── Sidebar.tsx      # Navigation with NavLink
-│   └── Footer.tsx
+│   ├── Layout.tsx      # Wrapper with Sidebar + Footer + Outlet
+│   ├── Sidebar.tsx     # Navigation with NavLink + logout
+│   ├── Footer.tsx
+│   ├── Spinner.tsx     # Loading spinner
+│   ├── ProtectedRoute.tsx   # Route guard for auth routes
+│   └── PublicOnlyRoute.tsx  # Route guard for login/register
+├── context/
+│   └── AuthContext.tsx    # Auth provider (login, register, logout)
+├── types/
+│   └── auth.ts        # Auth types (AuthUser, LoginCredentials, etc.)
+├── api/
+│   └── auth.ts        # Mock auth API (login, register, logout)
+├── hooks/
+│   └── useAuth.ts     # useAuth hook (exports from AuthContext)
 ├── test/
-│   └── setup.ts         # Vitest setup (jest-dom matchers)
-└── assets/              # Images, icons, SVGs
+│   └── setup.ts       # Vitest setup (jest-dom + mock localStorage + fetch)
+└── assets/            # Images, icons, SVGs
 ```
 
 ## Code Style
@@ -96,16 +109,26 @@ export function Layout({ children }: LayoutProps) {
 
 ## Routing
 
-- **React Router v7** with `<BrowserRouter>` in `main.tsx`
+- **React Router v7** with `<BrowserRouter>` in `App.tsx`
 - **Routes defined** in `App.tsx` under `<Routes>`
 - **Navigation**: Use `<NavLink>` from `react-router-dom` (not `<a>` tags)
 - **Active state**: `className={({ isActive }) => isActive ? 'active' : ''}`
+- **Protected routes**: Wrap with `<ProtectedRoute>` (requires auth, redirects to `/login`)
+- **Public-only routes**: Wrap with `<PublicOnlyRoute>` (redirects to `/dashboard` if auth)
+- **Nested routes**: Use `<Outlet />` in Layout component
 
 ### Adding a Route
 1. Create page in `src/pages/NewPage.tsx`
-2. Add `<Route path="/new-page" element={<NewPage />} />` in `App.tsx`
+2. Add route under `<ProtectedRoute>` in `App.tsx`:
+   ```tsx
+   <Route element={<ProtectedRoute />}>
+     <Route element={<Layout />}>
+       <Route path="/new-page" element={<NewPage />} />
+     </Route>
+   </Route>
+   ```
 3. Add nav item to `Sidebar.tsx` using `<NavLink>`
-4. Create test file `NewPage.test.tsx` (wrap with `<BrowserRouter>` in tests)
+4. Create test file `NewPage.test.tsx` (auth state mocked in setup.ts)
 
 ## Testing
 
@@ -155,3 +178,5 @@ describe('Dashboard', () => {
 5. **Unused imports/vars**: ESLint will flag; remove before committing
 6. **Assets import**: Use `import img from '../assets/image.png'` for images
 7. **CSS imports**: Place `import './Component.css'` inside component file
+8. **Auth state in tests**: localStorage and fetch are mocked in `setup.ts`
+9. **Route guards**: Use `<Spinner />` for loading state in ProtectedRoute/PublicOnlyRoute

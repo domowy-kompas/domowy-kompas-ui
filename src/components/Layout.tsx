@@ -1,10 +1,11 @@
 import type { ReactElement, ReactNode } from 'react'
 import { Sidebar } from './Sidebar'
 import { Footer } from './Footer'
+import { Outlet } from 'react-router-dom'
 import './Layout.css'
 
 interface LayoutProps {
-  children: ReactNode
+  children?: ReactNode
 }
 
 export function Layout({ children }: LayoutProps): ReactElement {
@@ -14,7 +15,7 @@ export function Layout({ children }: LayoutProps): ReactElement {
         <Sidebar />
       </div>
       <div className="layout-main">
-        <main className="layout-content">{children}</main>
+        <main className="layout-content">{children || <Outlet />}</main>
         <Footer />
       </div>
     </div>

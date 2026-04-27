@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import appIcon from '../assets/appIcon.png'
 import panelGlownyWhite from '../assets/sidebar/white/PanelGlowny.png'
 import transakcjeWhite from '../assets/sidebar/white/Transakcje.png'
@@ -29,6 +30,14 @@ const navItems = [
 ]
 
 export function Sidebar(): ReactElement {
+  const navigate = useNavigate()
+  const { logout } = useAuth()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
+
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
@@ -69,7 +78,7 @@ export function Sidebar(): ReactElement {
             </>
           )}
         </NavLink>
-        <button className="sidebar-bottom-btn" onClick={() => alert('Logout - TODO')}>
+        <button className="sidebar-bottom-btn" onClick={handleLogout}>
           <img src={logoutIcon} alt="" className="nav-icon" />
           <span className="nav-label">Wyloguj</span>
         </button>
