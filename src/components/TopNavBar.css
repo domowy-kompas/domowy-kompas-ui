@@ -1,0 +1,50 @@
+.top-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  height: 64px;
+  padding: 0 24px;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.top-navbar-view-name {
+  color: #005C55;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 24px;
+}
+
+.top-navbar-user-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-left: 1px solid #e5e7eb;
+  padding-left: 16px;
+  font-size: 14px;
+}
+
+.top-navbar-user-name {
+  font-size: 16px;
+  color: #334155;
+  font-weight: 500;
+}
+
+.top-navbar-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e8f0;
+}
+
+.top-navbar-avatar svg {
+  width: 20px;
+  height: 20px;
+  color: #94a3b8;
+}

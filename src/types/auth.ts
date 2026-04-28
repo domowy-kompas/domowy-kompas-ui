@@ -2,6 +2,7 @@ export interface AuthUser {
   id: string
   email: string
   name: string
+  surname: string
 }
 
 export interface AuthState {
@@ -19,4 +20,5 @@ export interface RegisterCredentials {
   email: string
   password: string
   name: string
+  surname: string
 }

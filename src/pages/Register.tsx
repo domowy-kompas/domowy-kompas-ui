@@ -7,6 +7,7 @@ export function Register(): ReactElement {
   const navigate = useNavigate()
   const { register, isLoading } = useAuth()
   const [name, setName] = useState('')
+  const [surname, setSurname] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -15,7 +16,7 @@ export function Register(): ReactElement {
     e.preventDefault()
     setError('')
     try {
-      await register({ email, password, name })
+      await register({ email, password, name, surname })
       navigate('/dashboard', { replace: true })
     } catch {
       setError('Registration failed. Please try again.')
@@ -35,6 +36,16 @@ export function Register(): ReactElement {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="surname">Nazwisko</label>
+            <input
+              id="surname"
+              type="text"
+              value={surname}
+              onChange={(e) => setSurname(e.target.value)}
               required
             />
           </div>

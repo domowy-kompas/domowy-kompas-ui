@@ -6,7 +6,8 @@ const USER_KEY = 'auth_user'
 const mockUser: AuthUser = {
   id: '1',
   email: 'test@example.com',
-  name: 'Test User',
+  name: 'Test',
+  surname: 'User',
 }
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -26,10 +27,16 @@ export async function login(credentials: LoginCredentials): Promise<{ token: str
 export async function register(credentials: RegisterCredentials): Promise<{ token: string; user: AuthUser }> {
   await delay(300)
   
-  if (credentials.email && credentials.password && credentials.name) {
+  if (credentials.email && credentials.password && credentials.name && credentials.surname) {
+    const newUser: AuthUser = {
+      ...mockUser,
+      name: credentials.name,
+      surname: credentials.surname,
+      email: credentials.email,
+    }
     localStorage.setItem(TOKEN_KEY, 'mock-token')
-    localStorage.setItem(USER_KEY, JSON.stringify({ ...mockUser, name: credentials.name, email: credentials.email }))
-    return { token: 'mock-token', user: { ...mockUser, name: credentials.name, email: credentials.email } }
+    localStorage.setItem(USER_KEY, JSON.stringify(newUser))
+    return { token: 'mock-token', user: newUser }
   }
   
   throw new Error('Registration failed')
