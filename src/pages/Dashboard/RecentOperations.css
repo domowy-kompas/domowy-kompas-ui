@@ -1,0 +1,72 @@
+.recent-operations-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.recent-operations-link {
+  font-size: 14px;
+  color: #198754;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.recent-operations-link:hover {
+  text-decoration: underline;
+}
+
+.recent-operations-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.recent-operations-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.recent-operations-item:last-child {
+  border-bottom: none;
+}
+
+.recent-operations-item-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex:1;
+}
+
+.recent-operations-item-info {
+  flex:1;
+}
+
+.recent-operations-item-title {
+  margin:0 0 2px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.recent-operations-item-subtitle {
+  margin:0;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.recent-operations-item-amount {
+  font-size: 16px;
+  font-weight: 600;
+  flex-shrink:0;
+}
+
+.amount-positive {
+  color: #198754;
+}
+
+.amount-negative {
+  color: #1e293b;
+}

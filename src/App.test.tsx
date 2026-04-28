@@ -23,7 +23,7 @@ describe('App', () => {
   it('renders dashboard by default', () => {
     render(<App />)
 
-    expect(screen.getByRole('heading', { name: /dashboard/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /dzień dobry/i })).toBeInTheDocument()
   })
 
   it('navigates to transactions when sidebar link clicked', async () => {

@@ -1,0 +1,16 @@
+.greeting {
+  margin-bottom: 32px;
+}
+
+.greeting-title {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.greeting-subtext {
+  margin: 0;
+  font-size: 16px;
+  color: #64748b;
+}

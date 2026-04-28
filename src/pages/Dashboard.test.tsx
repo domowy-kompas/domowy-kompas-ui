@@ -1,19 +1,24 @@
 import { render, screen } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
+import { AuthProvider } from '../context/AuthContext'
 import { Dashboard } from './Dashboard'
 
-function renderWithRouter(ui: React.ReactElement) {
-  return render(<BrowserRouter>{ui}</BrowserRouter>)
+function renderWithProviders(ui: React.ReactElement) {
+  return render(
+    <AuthProvider>
+      <BrowserRouter>{ui}</BrowserRouter>
+    </AuthProvider>
+  )
 }
 
 describe('Dashboard', () => {
-  it('renders heading', () => {
-    renderWithRouter(<Dashboard />)
-    expect(screen.getByRole('heading', { name: /dashboard/i })).toBeInTheDocument()
+  it('renders greeting with user name', () => {
+    renderWithProviders(<Dashboard />)
+    expect(screen.getByRole('heading', { name: /dzień dobry/i })).toBeInTheDocument()
   })
 
-  it('renders welcome message', () => {
-    renderWithRouter(<Dashboard />)
-    expect(screen.getByText(/welcome to your home dashboard/i)).toBeInTheDocument()
+  it('renders subtext', () => {
+    renderWithProviders(<Dashboard />)
+    expect(screen.getByText(/twoje finanse są pod kontrolą/i)).toBeInTheDocument()
   })
 })

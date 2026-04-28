@@ -1,0 +1,25 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 24px;
+}
+
+.dashboard-left-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-right-column {
+  min-width:0;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
