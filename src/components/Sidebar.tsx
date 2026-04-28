@@ -49,7 +49,7 @@ export function Sidebar(): ReactElement {
           </div>
         </div>
       </div>
-      <nav className="sidebar-nav">
+      <nav className="sidebar-nav" aria-label="Main navigation">
         {navItems.map((item) => (
           <NavLink
             key={item.to}

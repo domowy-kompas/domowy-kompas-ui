@@ -6,15 +6,18 @@ describe('App', () => {
   it('renders sidebar with navigation links', () => {
     render(<App />)
 
-    expect(screen.getByRole('link', { name: /panel główny/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /transakcje/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /budżety/i })).toBeInTheDocument()
+    expect(screen.getByRole('navigation', { name: /main navigation/i })).toBeInTheDocument()
+    expect(screen.getAllByRole('link', { name: /panel główny/i }).length).toBeGreaterThan(0)
+    expect(screen.getAllByRole('link', { name: /transakcje/i }).length).toBeGreaterThan(0)
+    expect(screen.getAllByRole('link', { name: /budżety/i }).length).toBeGreaterThan(0)
   })
 
   it('renders footer with copyright', () => {
     render(<App />)
 
-    expect(screen.getByRole('contentinfo')).toHaveTextContent(/domowy kompas/i)
+    const footer = screen.getByRole('contentinfo')
+    expect(footer).toHaveTextContent(/domowy kompas/i)
+    expect(footer).toHaveTextContent(/Wspieramy Twoją finansową przyszłość/i)
   })
 
   it('renders dashboard by default', () => {
@@ -23,11 +26,13 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: /dashboard/i })).toBeInTheDocument()
   })
 
-  it('navigates to transactions when link clicked', async () => {
+  it('navigates to transactions when sidebar link clicked', async () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByRole('link', { name: /transakcje/i }))
+    const sidebar = screen.getByRole('navigation', { name: /main navigation/i })
+    const transactionLink = sidebar.querySelector('a[href="/transactions"]')
+    await user.click(transactionLink!)
 
     expect(screen.getByRole('heading', { name: /transactions/i })).toBeInTheDocument()
   })
