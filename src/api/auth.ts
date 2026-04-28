@@ -6,8 +6,8 @@ const USER_KEY = 'auth_user'
 const mockUser: AuthUser = {
   id: '1',
   email: 'test@example.com',
-  name: 'Test',
-  surname: 'User',
+  name: 'Kacper',
+  surname: 'Klimas',
 }
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
