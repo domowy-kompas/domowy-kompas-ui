@@ -39,9 +39,11 @@ src/
 │   ├── Login.tsx       # Login page
 │   └── Register.tsx    # Register page
 ├── components/          # Reusable UI components
-│   ├── Layout.tsx      # Wrapper with Sidebar + Footer + Outlet
+│   ├── Layout.tsx      # Wrapper with Sidebar + Footer + Outlet (protected routes)
+│   ├── PublicLayout.tsx # Wrapper with Footer for login/register pages
 │   ├── Sidebar.tsx     # Navigation with NavLink + logout
-│   ├── Footer.tsx
+│   ├── Footer.tsx      # Footer with app name, copyright, and 4 navigation links
+│   ├── Footer.css      # Footer styles (Figma design, responsive)
 │   ├── Spinner.tsx     # Loading spinner
 │   ├── ProtectedRoute.tsx   # Route guard for auth routes
 │   └── PublicOnlyRoute.tsx  # Route guard for login/register
@@ -115,6 +117,8 @@ export function Layout({ children }: LayoutProps) {
 - **Active state**: `className={({ isActive }) => isActive ? 'active' : ''}`
 - **Protected routes**: Wrap with `<ProtectedRoute>` (requires auth, redirects to `/login`)
 - **Public-only routes**: Wrap with `<PublicOnlyRoute>` (redirects to `/dashboard` if auth)
+- **PublicLayout**: Used for login/register pages (includes Footer)
+- **Layout**: Used for protected routes (includes Sidebar + Footer + Outlet)
 - **Nested routes**: Use `<Outlet />` in Layout component
 
 ### Adding a Route
@@ -170,9 +174,9 @@ describe('Dashboard', () => {
 - `verbatimModuleSyntax: true`, `erasableSyntaxOnly: true`
 
 ## Common Pitfalls
-
+ 
 1. **Missing router wrapper** in tests: Components using `<NavLink>` need `<BrowserRouter>`
-2. **Used `<a>` instead of `<NavLink>`**: Causes full page reload
+2. **Used `<a>` instead of `<NavLink>`**: Causes full page reload (except Footer links which use `<a>` with `#` for external pages)
 3. **`any` type**: Use explicit types or `unknown` with guards
 4. **Missing return types**: Functions should declare return types
 5. **Unused imports/vars**: ESLint will flag; remove before committing
