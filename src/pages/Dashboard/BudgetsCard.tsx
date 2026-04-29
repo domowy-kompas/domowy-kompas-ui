@@ -1,10 +1,14 @@
 import type { ReactElement } from 'react'
 import { Link } from 'react-router-dom'
 import { ProgressBar } from './ProgressBar'
-import { budgetItems } from './dashboardData'
+import type { BudgetItem } from './dashboardData'
 import './CardWithList.css'
 
-export function BudgetsCard(): ReactElement {
+interface BudgetsCardProps {
+  items: BudgetItem[]
+}
+
+export function BudgetsCard({ items }: BudgetsCardProps): ReactElement {
   return (
     <div className="dashboard-card">
       <div className="dashboard-card-header-with-link">
@@ -12,7 +16,7 @@ export function BudgetsCard(): ReactElement {
         <Link to="/budgets" className="dashboard-card-link-green">Szczegóły</Link>
       </div>
       <div className="dashboard-card-list">
-        {budgetItems.map((item) => (
+        {items.map((item) => (
           <div key={item.category} className="budget-item">
             <div className="budget-item-header">
               <span className="budget-item-title">{item.category}</span>

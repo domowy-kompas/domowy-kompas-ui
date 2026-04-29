@@ -1,10 +1,14 @@
 import type { ReactElement } from 'react'
 import { ProgressBar } from './ProgressBar'
-import { goalItems } from './dashboardData'
+import type { GoalItem } from './dashboardData'
 import pigIcon from '../../assets/dashboard/saving-goals-pig.png'
 import './CardWithList.css'
 
-export function GoalsCard(): ReactElement {
+interface GoalsCardProps {
+  items: GoalItem[]
+}
+
+export function GoalsCard({ items }: GoalsCardProps): ReactElement {
   return (
     <div className="dashboard-card">
       <div className="dashboard-card-header-with-icon">
@@ -12,7 +16,7 @@ export function GoalsCard(): ReactElement {
         <img src={pigIcon} alt="Pig" className="dashboard-header-icon" />
       </div>
       <div className="dashboard-card-list">
-        {goalItems.map((item) => (
+        {items.map((item) => (
           <div key={item.name} className="dashboard-card-item">
             <div className="dashboard-card-item-left">
               <div className="goal-icon-wrapper">

@@ -1,48 +1,41 @@
 import type { AuthUser, LoginCredentials, RegisterCredentials } from '../types/auth'
+import { fetchApi } from './client'
 
 const TOKEN_KEY = 'auth_token'
 const USER_KEY = 'auth_user'
 
-const mockUser: AuthUser = {
-  id: '1',
-  email: 'test@example.com',
-  name: 'Kacper',
-  surname: 'Klimas',
+interface AuthResponse {
+  token: string
+  user: AuthUser
 }
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+export async function login(credentials: LoginCredentials): Promise<AuthResponse> {
+  const data = await fetchApi<AuthResponse>('/auth/login', {
+    method: 'POST',
+    body: JSON.stringify(credentials),
+  })
 
-export async function login(credentials: LoginCredentials): Promise<{ token: string; user: AuthUser }> {
-  await delay(300)
+  localStorage.setItem(TOKEN_KEY, data.token)
+  localStorage.setItem(USER_KEY, JSON.stringify(data.user))
   
-  if (credentials.email && credentials.password) {
-    localStorage.setItem(TOKEN_KEY, 'mock-token')
-    localStorage.setItem(USER_KEY, JSON.stringify(mockUser))
-    return { token: 'mock-token', user: mockUser }
-  }
-  
-  throw new Error('Login failed')
+  return data
 }
 
-export async function register(credentials: RegisterCredentials): Promise<{ token: string; user: AuthUser }> {
-  await delay(300)
+export async function register(credentials: RegisterCredentials): Promise<AuthResponse> {
+  const data = await fetchApi<AuthResponse>('/auth/register', {
+    method: 'POST',
+    body: JSON.stringify(credentials),
+  })
+
+  localStorage.setItem(TOKEN_KEY, data.token)
+  localStorage.setItem(USER_KEY, JSON.stringify(data.user))
   
-  if (credentials.email && credentials.password && credentials.name && credentials.surname) {
-    const newUser: AuthUser = {
-      ...mockUser,
-      name: credentials.name,
-      surname: credentials.surname,
-      email: credentials.email,
-    }
-    localStorage.setItem(TOKEN_KEY, 'mock-token')
-    localStorage.setItem(USER_KEY, JSON.stringify(newUser))
-    return { token: 'mock-token', user: newUser }
-  }
-  
-  throw new Error('Registration failed')
+  return data
 }
 
 export function logout(): void {
   localStorage.removeItem(TOKEN_KEY)
   localStorage.removeItem(USER_KEY)
+  // Optional: ping server to logout
+  // fetchApi('/auth/logout', { method: 'POST' }).catch(() => {})
 }

@@ -1,9 +1,13 @@
 import type { ReactElement } from 'react'
 import { Link } from 'react-router-dom'
-import { operationItems } from './dashboardData'
+import type { OperationItem } from './dashboardData'
 import './RecentOperations.css'
 
-export function RecentOperations(): ReactElement {
+interface RecentOperationsProps {
+  items: OperationItem[]
+}
+
+export function RecentOperations({ items }: RecentOperationsProps): ReactElement {
   return (
     <div className="dashboard-card">
       <div className="recent-operations-header">
@@ -11,7 +15,7 @@ export function RecentOperations(): ReactElement {
         <Link to="/transactions" className="recent-operations-button">Zobacz wszystkie</Link>
       </div>
       <div className="recent-operations-list">
-        {operationItems.map((item) => (
+        {items.map((item) => (
           <div key={item.id} className="recent-operations-item">
             <div className="recent-operations-item-left">
               <div className="operation-icon-wrapper">

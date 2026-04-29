@@ -1,0 +1,24 @@
+{
+  "summary": {
+    "totalBalance": 12540.50,
+    "monthlyIncome": 8500.00,
+    "monthlyExpenses": 3240.20
+  },
+  "budgets": [
+    { "id": "1", "name": "Dom", "spent": 1200, "limit": 2000, "color": "var(--accent-primary)" },
+    { "id": "2", "name": "Jedzenie", "spent": 850, "limit": 1500, "color": "var(--success-color)" },
+    { "id": "3", "name": "Rozrywka", "spent": 400, "limit": 500, "color": "var(--warning-color)" },
+    { "id": "4", "name": "Transport", "spent": 300, "limit": 400, "color": "#0ea5e9" }
+  ],
+  "goals": [
+    { "id": "1", "name": "Poduszka Finansowa", "current": 15000, "target": 30000, "color": "var(--success-color)" },
+    { "id": "2", "name": "Wakacje", "current": 2000, "target": 5000, "color": "var(--warning-color)" }
+  ],
+  "transactions": [
+    { "id": "t1", "date": "2026-04-29T10:00:00Z", "title": "Biedronka - Zakupy", "amount": -145.20, "category": "Jedzenie", "status": "completed" },
+    { "id": "t2", "date": "2026-04-28T15:30:00Z", "title": "Wynagrodzenie", "amount": 8500.00, "category": "Wpływy", "status": "completed" },
+    { "id": "t3", "date": "2026-04-27T08:15:00Z", "title": "Netflix", "amount": -43.00, "category": "Rozrywka", "status": "completed" },
+    { "id": "t4", "date": "2026-04-26T18:45:00Z", "title": "Orlen - Paliwo", "amount": -250.00, "category": "Transport", "status": "completed" },
+    { "id": "t5", "date": "2026-04-25T12:00:00Z", "title": "Czynsz", "amount": -1200.00, "category": "Dom", "status": "completed" }
+  ]
+}

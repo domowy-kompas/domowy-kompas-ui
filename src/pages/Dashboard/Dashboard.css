@@ -27,3 +27,21 @@
     grid-template-columns: 1fr;
   }
 }
+
+.dashboard-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+.dashboard-error {
+  background-color: rgba(255, 59, 48, 0.1);
+  color: #ff3b30;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 59, 48, 0.2);
+  margin-top: 24px;
+}
