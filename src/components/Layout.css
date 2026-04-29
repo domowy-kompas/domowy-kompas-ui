@@ -6,7 +6,7 @@
 
 .layout-sidebar {
   flex-shrink: 0;
-  width: 360px;
+  width: 280px;
   transition: width 0.3s ease;
   background: #f1f5f9;
   height: 100vh;

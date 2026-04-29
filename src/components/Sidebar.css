@@ -31,8 +31,8 @@
 }
 
 .sidebar-icon {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   border-radius: 8px;
   flex-shrink: 0;
   background-color: #0f766e;
@@ -63,7 +63,7 @@
 
 .sidebar-title {
   margin: 0;
-  font-size: 28px;
+  font-size: 20px;
   font-weight: 700;
   color: #0f766e;
   transition: font-size 0.3s ease;
@@ -75,7 +75,7 @@
 
 .sidebar-subtitle {
   margin: 4px 0 0;
-  font-size: 15px;
+  font-size: 13px;
   color: #64748b;
   transition: font-size 0.3s ease;
 }
@@ -95,11 +95,11 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 16px;
+  padding: 10px 14px;
   border-radius: 8px;
   color: #475569;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   transition: background-color 0.15s ease, padding 0.3s ease;
   width: 100%;
@@ -130,8 +130,8 @@
 }
 
 .nav-icon {
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 22px;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -164,11 +164,11 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 16px;
+  padding: 10px 14px;
   border-radius: 8px;
   color: #475569;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   background: none;
   border: none;
