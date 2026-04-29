@@ -159,11 +159,11 @@ export function LandingPage(): ReactElement {
         <section className="cta-section">
           <div className="cta-card">
             <h2>Dołącz do tysięcy użytkowników, którzy oszczędzają więcej każdego miesiąca.</h2>
-            <p className="testimonial-text">
+            <p className="landing-page-testimonial-text">
               "Domowy Kompas zmienił sposób, w jaki patrzę na pieniądze. W końcu
               przestałem się martwić o koniec miesiąca."
             </p>
-            <div className="testimonial-author">
+            <div className="landing-page-testimonial-author">
               <img src={avatar2} alt="Marek Wiśniewski" className="author-avatar" />
               <span className="author-info">Marek Wiśniewski, użytkownik od 2 lat</span>
             </div>

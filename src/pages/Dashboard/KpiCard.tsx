@@ -16,8 +16,10 @@ export function KpiCard({ iconSrc, label, value, badgeText, badgeColor }: KpiCar
         <img src={iconSrc} alt={label} className="kpi-card-icon" />
         <span className={`kpi-card-badge kpi-card-badge--${badgeColor}`}>{badgeText}</span>
       </div>
-      <p className="kpi-card-label">{label}</p>
-      <p className="kpi-card-value">{value}</p>
+      <div className="kpi-card-content">
+        <p className="kpi-card-label">{label}</p>
+        <p className="kpi-card-value">{value}</p>
+      </div>
     </div>
   )
 }
