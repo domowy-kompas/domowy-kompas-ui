@@ -12,6 +12,7 @@ import { Goals, Reports, Help } from './pages/Misc'
 import { Settings } from './pages/Settings'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
+import { LandingPage } from './pages/LandingPage'
 
 function App(): ReactElement {
   return (
@@ -20,13 +21,13 @@ function App(): ReactElement {
         <Routes>
           <Route element={<PublicOnlyRoute />}>
             <Route element={<PublicLayout />}>
+              <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
             </Route>
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route element={<Layout />}>
-              <Route path="/" element={<Dashboard />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/transactions" element={<Transactions />} />
               <Route path="/budgets" element={<Budgets />} />

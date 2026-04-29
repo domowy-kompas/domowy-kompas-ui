@@ -1,73 +1,45 @@
-# React + TypeScript + Vite
+# Domowy Kompas UI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Projekt interfejsu systemu "Domowy Kompas" budowany w oparciu o Tauri v2, React 19 i Vite 7.
 
-Currently, two official plugins are available:
+## 🏗 Architektura Projektu
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Stosujemy podejście **Feature-First**. Każda nowa funkcjonalność powinna znajdować się w `src/features/[nazwa-feature]/`.
 
-## React Compiler
+### Struktura Feature:
+- `components/` - Komponenty UI specyficzne dla danego modułu.
+- `hooks/` - Customowe hooki do logiki i pobierania danych.
+- `types/` - Definicje interfejsów TypeScript.
+- `[feature-name].css` - Stylizacja modułu (korzystająca z globalnych zmiennych).
+- `[FeatureName]Page.tsx` - Główny kontener strony.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠 Rozwój i Mockowanie (Backend)
 
-## Expanding the ESLint configuration
+Obecnie backend jest mockowany za pomocą `json-server`.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Uruchamianie**: `npm run dev:mock` (uruchamia jednocześnie Vite i Mock Server).
+- **Konfiguracja**: `mocks/db.json` zawiera bazę danych, a `mocks/server.js` obsługuje middleware (np. symulację opóźnień sieciowych 1-5s).
+- **Pobieranie danych**: Używamy `src/api/client.ts` do komunikacji. Wszystkie endpointy powinny być w formacie `kebab-case`.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🎨 Standardy UI/UX
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Aplikacja dąży do estetyki **premium desktop app**:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1.  **Layout (App Shell)**:
+    - Cała aplikacja jest zamknięta w `100vh` bez scrolla głównego okna (`overflow: hidden` na `.layout`).
+    - Tylko środkowy kontener `.layout-content` posiada `overflow-y: auto`.
+    - Sidebar, TopNavBar i Footer są zawsze przypięte do krawędzi ekranu.
+2.  **Loading States**:
+    - Nie używamy prostych loaderów (spinnerów) tam, gdzie to możliwe.
+    - Stosujemy **Skeleton Screens** (korzystając z `react-loading-skeleton`). Skelefony powinny odzwierciedlać finalną strukturę komponentu.
+3.  **Stylizacja**:
+    - Używamy Vanilla CSS z silnym oparciem o zmienne CSS zdefiniowane w `src/index.css` (blok `:root`).
+    - Unikamy `min-height` na poziomie stron, aby nie wymuszać niepotrzebnych scrolli w układzie App Shell.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📊 Obsługa Danych
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Filtrowanie/Pagowanie**: Preferujemy filtrowanie po stronie klienta dla mniejszych zestawów danych (np. transakcje), aby zapewnić natychmiastową reakcję UI.
+- **Derived State**: Obliczamy sumy i statystyki w `useMemo` na podstawie pobranych surowych danych.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+*Dokumentacja zaktualizowana: 2026-04-29*

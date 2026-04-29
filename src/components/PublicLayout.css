@@ -6,10 +6,14 @@
 
 .public-layout-content {
   flex: 1 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.public-layout-content.centered {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
-  width: 100%;
-  box-sizing: border-box;
+  min-height: calc(100vh - 104px); /* Subtract footer height */
 }
