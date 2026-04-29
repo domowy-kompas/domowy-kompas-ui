@@ -5,10 +5,12 @@
     "monthlyExpenses": 3240.20
   },
   "budgets": [
-    { "id": "1", "name": "Dom", "spent": 1200, "limit": 2000, "color": "var(--accent-primary)" },
-    { "id": "2", "name": "Jedzenie", "spent": 850, "limit": 1500, "color": "var(--success-color)" },
-    { "id": "3", "name": "Rozrywka", "spent": 400, "limit": 500, "color": "var(--warning-color)" },
-    { "id": "4", "name": "Transport", "spent": 300, "limit": 400, "color": "#0ea5e9" }
+    { "id": "1", "name": "Jedzenie", "spent": 850, "limit": 1200, "color": "var(--accent-primary)" },
+    { "id": "2", "name": "Dom", "spent": 1420, "limit": 1500, "color": "var(--accent-primary)" },
+    { "id": "3", "name": "Rozrywka", "spent": 310, "limit": 300, "color": "var(--accent-primary)" },
+    { "id": "4", "name": "Zdrowie", "spent": 0, "limit": 400, "color": "var(--accent-primary)" },
+    { "id": "5", "name": "Transport", "spent": 120, "limit": 400, "color": "var(--accent-primary)" },
+    { "id": "6", "name": "Inne", "spent": 40, "limit": 200, "color": "var(--accent-primary)" }
   ],
   "goals": [
     { "id": "1", "name": "Poduszka Finansowa", "current": 15000, "target": 30000, "color": "var(--success-color)" },
