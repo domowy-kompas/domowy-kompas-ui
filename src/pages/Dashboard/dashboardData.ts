@@ -1,5 +1,18 @@
+import currentStateIcon from '../../assets/dashboard/current-state.png'
+import monthIncomeIcon from '../../assets/dashboard/month-income.png'
+import monthOutcomeIcon from '../../assets/dashboard/month-outcome.png'
+
+import carIcon from '../../assets/dashboard/saving-goals-car.png'
+import vacationIcon from '../../assets/dashboard/saving-goals-vacation.png'
+
+import cartIcon from '../../assets/dashboard/transactions-biedronka.png'
+import tvIcon from '../../assets/dashboard/transactions-netflix.png'
+import fuelIcon from '../../assets/dashboard/transactions-orlen.png'
+import moneyIcon from '../../assets/dashboard/transactions-pay.png'
+import foodIcon from '../../assets/dashboard/transactions-pizza.png'
+
 export interface KpiData {
-  iconLabel: string
+  iconSrc: string
   label: string
   value: string
   badgeText: string
@@ -8,16 +21,15 @@ export interface KpiData {
 
 export interface BudgetItem {
   category: string
-  current: number
-  limit: number
-  iconLabel: string
+  percentage: number
+  colorClass: 'green' | 'brown' | 'blue'
 }
 
 export interface GoalItem {
   name: string
-  current: number
-  target: number
-  iconLabel: string
+  percentage: number
+  iconSrc: string
+  colorClass: 'green' | 'blue'
 }
 
 export interface OperationItem {
@@ -26,50 +38,49 @@ export interface OperationItem {
   category: string
   timeAgo: string
   amount: number
-  iconLabel: string
+  iconSrc: string
+  paymentMethod: string
 }
 
 export const kpiData: KpiData[] = [
   {
-    iconLabel: 'Bank',
+    iconSrc: currentStateIcon,
     label: 'Całkowite Saldo',
     value: '5 420,00 zł',
     badgeText: '+2.4%',
     badgeColor: 'green',
   },
   {
-    iconLabel: 'Graph',
-    label: 'Miesięczne Wydatki',
-    value: '3 210,00 zł',
-    badgeText: '32% dochodu',
-    badgeColor: 'peach',
+    iconSrc: monthIncomeIcon,
+    label: 'Miesięczne Dochody',
+    value: '8 000,00 zł',
+    badgeText: 'W tym miesiącu',
+    badgeColor: 'blue',
   },
   {
-    iconLabel: 'TrendDown',
-    label: 'Miesięczne Oszczędności',
-    value: '1 210,00 zł',
-    badgeText: '+8.1%',
-    badgeColor: 'blue',
+    iconSrc: monthOutcomeIcon,
+    label: 'Miesięczne Wydatki',
+    value: '2 580,00 zł',
+    badgeText: '32% dochodu',
+    badgeColor: 'peach',
   },
 ]
 
 export const budgetItems: BudgetItem[] = [
-  { category: 'Jedzenie', current: 1200, limit: 1500, iconLabel: 'Cart' },
-  { category: 'Transport', current: 800, limit: 1000, iconLabel: 'Fuel' },
-  { category: 'Rozrywka', current: 450, limit: 500, iconLabel: 'Game' },
-  { category: 'Rachunki', current: 1200, limit: 1300, iconLabel: 'Bill' },
+  { category: 'Artykuły spożywcze', percentage: 60, colorClass: 'green' },
+  { category: 'Rozrywka', percentage: 92, colorClass: 'brown' },
+  { category: 'Transport', percentage: 20, colorClass: 'blue' },
 ]
 
 export const goalItems: GoalItem[] = [
-  { name: 'Samochód', current: 25000, target: 50000, iconLabel: 'Car' },
-  { name: 'Fundusz Awaryjny', current: 15000, target: 20000, iconLabel: 'Umbrella' },
-  { name: 'Wakacje', current: 3000, target: 8000, iconLabel: 'Beach' },
+  { name: 'Nowy samochód', percentage: 45, iconSrc: carIcon, colorClass: 'green' },
+  { name: 'Wakacje', percentage: 15, iconSrc: vacationIcon, colorClass: 'blue' },
 ]
 
 export const operationItems: OperationItem[] = [
-  { id: '1', title: 'Lidl', category: 'Jedzenie', timeAgo: '2h temu', amount: -142.5, iconLabel: 'Cart' },
-  { id: '2', title: 'Wypłata', category: 'Wynagrodzenie', timeAgo: '1d temu', amount: 8000, iconLabel: 'Money' },
-  { id: '3', title: 'Orlen', category: 'Transport', timeAgo: '1d temu', amount: -250, iconLabel: 'Fuel' },
-  { id: '4', title: 'Netflix', category: 'Rozrywka', timeAgo: '2d temu', amount: -59.99, iconLabel: 'TV' },
-  { id: '5', title: 'Pensja dodatkowa', category: 'Wynagrodzenie', timeAgo: '3d temu', amount: 1200, iconLabel: 'Money' },
+  { id: '1', title: 'Biedronka Supermarket', category: 'Artykuły spożywcze', timeAgo: 'Dziś, 10:24', amount: -142.5, iconSrc: cartIcon, paymentMethod: 'Karta płatnicza' },
+  { id: '2', title: 'Wynagrodzenie - TechCorp', category: 'Dochód', timeAgo: '2 dni temu', amount: 8000, iconSrc: moneyIcon, paymentMethod: 'Przelew przychodzący' },
+  { id: '3', title: 'Orlen Stacja Paliw', category: 'Transport', timeAgo: '3 dni temu', amount: -280, iconSrc: fuelIcon, paymentMethod: 'Karta płatnicza' },
+  { id: '4', title: 'Subskrypcja Netflix', category: 'Rozrywka', timeAgo: '4 dni temu', amount: -60, iconSrc: tvIcon, paymentMethod: 'Subskrypcja' },
+  { id: '5', title: 'Pizzeria Bella Italia', category: 'Rozrywka', timeAgo: '5 dni temu', amount: -124, iconSrc: foodIcon, paymentMethod: 'Karta płatnicza' },
 ]

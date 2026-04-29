@@ -1,3 +1,23 @@
+:root {
+  --badge-green-bg: #d1fae5;
+  --badge-green-text: #065f46;
+  --badge-peach-bg: #fed7aa;
+  --badge-peach-text: #9a3412;
+  --badge-blue-bg: #dbeafe;
+  --badge-blue-text: #1e40af;
+
+  --color-success: #198754;
+  --color-danger: #dc3545;
+  --color-warning: #854d0e;
+  --color-info: #0d6efd;
+
+  --color-text-main: #212529;
+  --color-text-muted: #6c757d;
+  --color-bg-light: #f8f9fa;
+  --color-bg-card: #ffffff;
+  --color-border: #ced4da;
+}
+
 * {
   box-sizing: border-box;
 }

@@ -12,6 +12,12 @@
   margin-bottom: 12px;
 }
 
+.kpi-card-icon {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
 .kpi-card-badge {
   padding: 4px 8px;
   border-radius: 12px;

@@ -1,6 +1,7 @@
 .dashboard {
   display: flex;
   flex-direction: column;
+  gap: 40px;
 }
 
 .dashboard-grid {
@@ -12,10 +13,13 @@
 .dashboard-left-column {
   display: flex;
   flex-direction: column;
+  gap: 24px;
 }
 
 .dashboard-right-column {
-  min-width:0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 1024px) {

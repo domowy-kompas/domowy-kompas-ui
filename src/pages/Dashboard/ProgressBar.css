@@ -18,15 +18,23 @@
 }
 
 .progress-bar--green {
-  background-color: #198754;
+  background-color: var(--color-success);
 }
 
 .progress-bar--orange {
-  background-color: #fd7e14;
+  background-color: var(--color-primary-orange, #fd7e14);
 }
 
 .progress-bar--red {
-  background-color: #dc3545;
+  background-color: var(--color-danger);
+}
+
+.progress-bar--brown {
+  background-color: var(--color-warning);
+}
+
+.progress-bar--blue {
+  background-color: var(--color-info);
 }
 
 .progress-bar-warning {

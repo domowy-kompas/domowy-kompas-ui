@@ -5,28 +5,34 @@
   margin-bottom: 16px;
 }
 
-.recent-operations-link {
+.recent-operations-button {
   font-size: 14px;
-  color: #198754;
+  color: var(--color-text-muted);
+  background-color: var(--color-bg-light);
   text-decoration: none;
   font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
 }
 
-.recent-operations-link:hover {
-  text-decoration: underline;
+.recent-operations-button:hover {
+  background-color: var(--color-border);
 }
 
 .recent-operations-list {
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .recent-operations-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0;
+  padding: 16px 0;
   border-bottom: 1px solid #f1f5f9;
+  flex: 1;
 }
 
 .recent-operations-item:last-child {
@@ -57,16 +63,44 @@
   color: #64748b;
 }
 
+.recent-operations-item-right {
+  text-align: right;
+  flex-shrink: 0;
+}
+
 .recent-operations-item-amount {
   font-size: 16px;
   font-weight: 600;
-  flex-shrink:0;
+  margin: 0 0 2px;
 }
 
 .amount-positive {
-  color: #198754;
+  color: var(--color-success);
 }
 
 .amount-negative {
-  color: #1e293b;
+  color: var(--color-warning); /* Brownish red */
+}
+
+.recent-operations-item-method {
+  font-size: 12px;
+  color: #a1a1aa; /* Lighter gray for method */
+  margin: 0;
+}
+
+.operation-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--color-bg-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.operation-icon {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
 }
