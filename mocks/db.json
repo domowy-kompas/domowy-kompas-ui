@@ -228,5 +228,66 @@
     "spentAmount": 3500,
     "totalLimit": 5400,
     "percentageUsed": 65
+  },
+  "reports": {
+    "historicalData": [
+      { "month": "MAJ", "income": 4500, "expenses": 4200 },
+      { "month": "CZE", "income": 5200, "expenses": 4800 },
+      { "month": "LIP", "income": 6500, "expenses": 4500 },
+      { "month": "SIE", "income": 5100, "expenses": 4900 },
+      { "month": "WRZ", "income": 5200, "expenses": 5200 },
+      { "month": "PAŹ", "income": 8450, "expenses": 3240 }
+    ],
+    "Miesiąc": {
+      "summary": {
+        "totalIncome": 12450.00,
+        "incomeTrend": 4.2,
+        "totalExpenses": 8120.50,
+        "expensesTrend": 1.8,
+        "netSavings": 4329.50,
+        "savingsTrend": 34.7
+      },
+      "categories": [
+        { "name": "Mieszkanie i Rachunki", "amount": 4060, "percentage": 50, "limit": 4800, "color": "#005C55", "icon": "home" },
+        { "name": "Jedzenie i Restauracje", "amount": 1624, "percentage": 20, "limit": 2500, "color": "#2563EB", "icon": "utensils" },
+        { "name": "Rozrywka i Czas Wolny", "amount": 1299, "percentage": 16, "limit": 1400, "color": "#D9480F", "icon": "film" },
+        { "name": "Transport i Paliwo", "amount": 850, "percentage": 10, "limit": 2000, "color": "#64748B", "icon": "car" },
+        { "name": "Inne", "amount": 287, "percentage": 4, "limit": 500, "color": "#4B5563", "icon": "circle" }
+      ]
+    },
+    "Kwartał": {
+      "summary": {
+        "totalIncome": 38450.00,
+        "incomeTrend": 12.5,
+        "totalExpenses": 24120.50,
+        "expensesTrend": -5.2,
+        "netSavings": 14329.50,
+        "savingsTrend": 45.2
+      },
+      "categories": [
+        { "name": "Mieszkanie i Rachunki", "amount": 12180, "percentage": 50, "limit": 14400, "color": "#005C55", "icon": "home" },
+        { "name": "Jedzenie i Restauracje", "amount": 4872, "percentage": 20, "limit": 7500, "color": "#2563EB", "icon": "utensils" },
+        { "name": "Rozrywka i Czas Wolny", "amount": 3897, "percentage": 16, "limit": 4200, "color": "#D9480F", "icon": "film" },
+        { "name": "Transport i Paliwo", "amount": 2550, "percentage": 10, "limit": 6000, "color": "#64748B", "icon": "car" },
+        { "name": "Inne", "amount": 621, "percentage": 4, "limit": 1500, "color": "#4B5563", "icon": "circle" }
+      ]
+    },
+    "Rok": {
+      "summary": {
+        "totalIncome": 154200.00,
+        "incomeTrend": 18.2,
+        "totalExpenses": 98400.50,
+        "expensesTrend": 2.1,
+        "netSavings": 55799.50,
+        "savingsTrend": 36.1
+      },
+      "categories": [
+        { "name": "Mieszkanie i Rachunki", "amount": 49200, "percentage": 50, "limit": 57600, "color": "#005C55", "icon": "home" },
+        { "name": "Jedzenie i Restauracje", "amount": 19680, "percentage": 20, "limit": 30000, "color": "#2563EB", "icon": "utensils" },
+        { "name": "Rozrywka i Czas Wolny", "amount": 15744, "percentage": 16, "limit": 16800, "color": "#D9480F", "icon": "film" },
+        { "name": "Transport i Paliwo", "amount": 9840, "percentage": 10, "limit": 24000, "color": "#64748B", "icon": "car" },
+        { "name": "Inne", "amount": 3936, "percentage": 4, "limit": 6000, "color": "#4B5563", "icon": "circle" }
+      ]
+    }
   }
 }

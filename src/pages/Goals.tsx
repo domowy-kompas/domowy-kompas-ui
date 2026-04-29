@@ -8,21 +8,29 @@ import savingSumIcon from '../assets/goals/saving-sum.png'
 import tipIcon from '../assets/goals/tip.png'
 import tipIllustration from '../assets/goals/tip-2.png'
 import plusIcon from '../assets/plus.png'
-import calendarIcon from '../assets/budgets/calendar.png'
 
-// Category Icons (assuming some mapping or using generic for now)
-import transportIcon from '../assets/budgets/transport.png'
-import homeIcon from '../assets/budgets/home.png' // using home as placeholder for cushion/shield if needed
+// New Icons for Goal Cards
+import goalCalendarIcon from '../assets/goals/goal-calendar.png'
+import goalCashIcon from '../assets/goals/goal-cash.png'
 
-// Goal Images
+// Goal Images & Category Icons
 import carImage from '../assets/goals/goal-car.png'
+import carIcon from '../assets/goals/goal-car-2.png'
 import vacationImage from '../assets/goals/vacation-goal.png'
+import vacationIcon from '../assets/goals/goal-vacation-2.png'
 import cushionImage from '../assets/goals/cushion.png'
+import cushionIcon from '../assets/goals/goal-cushion-2.png'
 
 const GOAL_IMAGES: Record<string, string> = {
   'goal-car.png': carImage,
   'vacation-goal.png': vacationImage,
   'cushion.png': cushionImage
+}
+
+const GOAL_ICONS: Record<string, string> = {
+  'goal-car.png': carIcon,
+  'vacation-goal.png': vacationIcon,
+  'cushion.png': cushionIcon
 }
 
 export function Goals(): ReactElement {
@@ -87,7 +95,7 @@ export function Goals(): ReactElement {
               <div className="goal-card-content">
                 <div className="goal-card-header">
                   <h3>{goal.name}</h3>
-                  <img src={transportIcon} alt="" className="goal-category-icon" />
+                  <img src={GOAL_ICONS[goal.image]} alt="" className="goal-category-icon" />
                 </div>
 
                 <div className="goal-progress-wrapper">
@@ -107,11 +115,11 @@ export function Goals(): ReactElement {
 
                 <div className="goal-card-footer">
                   <div className="footer-item">
-                    <img src={calendarIcon} alt="" className="footer-icon" />
+                    <img src={goalCalendarIcon} alt="" className="footer-icon" />
                     <span>{goal.deadline}</span>
                   </div>
                   <div className="footer-item">
-                    <svg className="footer-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2a2 2 0 0 1 0-4Z"></path><circle cx="18" cy="12" r="1"></circle></svg>
+                    <img src={goalCashIcon} alt="" className="footer-icon" />
                     <span>{goal.monthlyContribution} PLN/mc</span>
                   </div>
                 </div>
