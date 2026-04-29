@@ -57,17 +57,6 @@ export function LoginCard(): ReactElement {
               "Dzięki aplikacji Domowy Kompas w końcu wiem, gdzie uciekają moje pieniądze. Planowanie budżetu nigdy nie było tak proste."
             </p>
           </div>
-          {/* Background wallet icon */}
-          <div className="wallet-icon-bg">
-            <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="20" y="30" width="80" height="60" rx="12" fill="#004D40" fillOpacity="0.06" />
-              <path d="M30 30H90" stroke="#004D40" strokeWidth="3" strokeOpacity="0.1" />
-              <path d="M30 90H90" stroke="#004D40" strokeWidth="3" strokeOpacity="0.1" />
-              <rect x="35" y="38" width="20" height="44" rx="4" fill="#004D40" fillOpacity="0.08" />
-              <rect x="60" y="38" width="20" height="44" rx="4" fill="#004D40" fillOpacity="0.08" />
-              <circle cx="50" cy="60" r="8" fill="#004D40" fillOpacity="0.1" />
-            </svg>
-          </div>
         </div>
       </div>
 
