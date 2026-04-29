@@ -16,6 +16,18 @@
   --color-bg-light: #f8f9fa;
   --color-bg-card: #ffffff;
   --color-border: #ced4da;
+  
+  /* Financial Theme */
+  --tx-bg-color: #F7FAF8;
+  --tx-card-bg: #ffffff;
+  --tx-border-radius: 16px;
+  --tx-accent-color: #006d5b;
+  --tx-text-primary: #1a1a1a;
+  --tx-text-secondary: #717171;
+  --tx-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  --tx-income-color: #10b981;
+  --tx-expense-color: #1a1a1a;
+  --tx-budget-bg: #004d40;
 }
 
 * {
@@ -28,7 +40,8 @@ body {
 }
 
 #root {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 h1 {

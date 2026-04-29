@@ -1,10 +1,6 @@
 import type { ReactElement } from 'react'
+import { TransactionsPage } from '../features/transactions/TransactionsPage'
 
 export function Transactions(): ReactElement {
-  return (
-    <div>
-      <h1>Transactions</h1>
-      <p>View and manage your transactions here.</p>
-    </div>
-  )
+  return <TransactionsPage />
 }

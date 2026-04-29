@@ -15,10 +15,180 @@
     { "id": "2", "name": "Wakacje", "current": 2000, "target": 5000, "color": "var(--warning-color)" }
   ],
   "transactions": [
-    { "id": "t1", "date": "2026-04-29T10:00:00Z", "title": "Biedronka - Zakupy", "amount": -145.20, "category": "Jedzenie", "status": "completed" },
-    { "id": "t2", "date": "2026-04-28T15:30:00Z", "title": "Wynagrodzenie", "amount": 8500.00, "category": "Wpływy", "status": "completed" },
-    { "id": "t3", "date": "2026-04-27T08:15:00Z", "title": "Netflix", "amount": -43.00, "category": "Rozrywka", "status": "completed" },
-    { "id": "t4", "date": "2026-04-26T18:45:00Z", "title": "Orlen - Paliwo", "amount": -250.00, "category": "Transport", "status": "completed" },
-    { "id": "t5", "date": "2026-04-25T12:00:00Z", "title": "Czynsz", "amount": -1200.00, "category": "Dom", "status": "completed" }
-  ]
+    {
+      "id": "t1",
+      "date": "2026-04-25",
+      "time": "14:30",
+      "title": "Biedronka - Zakupy spożywcze",
+      "category": "Zakupy",
+      "categoryIcon": "shopping-cart",
+      "method": "Karta mBank",
+      "methodIcon": "credit-card",
+      "amount": -154.20
+    },
+    {
+      "id": "t2",
+      "date": "2026-04-10",
+      "time": "09:00",
+      "title": "Wynagrodzenie - Kwiecień",
+      "category": "Praca",
+      "categoryIcon": "banknote",
+      "method": "Przelew bankowy",
+      "methodIcon": "landmark",
+      "amount": 8450.00
+    },
+    {
+      "id": "t3",
+      "date": "2026-03-28",
+      "time": "18:15",
+      "title": "Czynsz za mieszkanie (Marzec)",
+      "category": "Dom",
+      "categoryIcon": "home",
+      "method": "Przelew bankowy",
+      "methodIcon": "landmark",
+      "amount": -2800.00
+    },
+    {
+      "id": "t4",
+      "date": "2026-03-15",
+      "time": "21:45",
+      "title": "Kino - Batman",
+      "category": "Rozrywka",
+      "categoryIcon": "ticket",
+      "method": "Karta Revolut",
+      "methodIcon": "credit-card",
+      "amount": -68.00
+    },
+    {
+      "id": "t5",
+      "date": "2026-02-20",
+      "time": "12:00",
+      "title": "Restauracja - Kolacja",
+      "category": "Rozrywka",
+      "categoryIcon": "ticket",
+      "method": "Gotówka",
+      "methodIcon": "banknote",
+      "amount": -250.00
+    },
+    {
+      "id": "t6",
+      "date": "2026-02-05",
+      "time": "10:00",
+      "title": "Stacja Paliw Orlen",
+      "category": "Transport",
+      "categoryIcon": "car",
+      "method": "Karta mBank",
+      "methodIcon": "credit-card",
+      "amount": -320.00
+    },
+    {
+      "id": "t7",
+      "date": "2026-01-12",
+      "time": "16:30",
+      "title": "Sklep Sportowy",
+      "category": "Zakupy",
+      "categoryIcon": "shopping-cart",
+      "method": "Karta Revolut",
+      "methodIcon": "credit-card",
+      "amount": -450.00
+    },
+    {
+      "id": "t8",
+      "date": "2026-04-28",
+      "time": "11:20",
+      "title": "Kawiarnia Starbucks",
+      "category": "Rozrywka",
+      "categoryIcon": "ticket",
+      "method": "Karta mBank",
+      "methodIcon": "credit-card",
+      "amount": -24.50
+    },
+    {
+      "id": "t9",
+      "date": "2026-03-10",
+      "time": "15:00",
+      "title": "Apteka Słoneczna",
+      "category": "Inne",
+      "categoryIcon": "circle",
+      "method": "Gotówka",
+      "methodIcon": "banknote",
+      "amount": -85.00
+    },
+    {
+      "id": "t10",
+      "date": "2026-02-14",
+      "time": "20:00",
+      "title": "Kwiaciarnia - Walentynki",
+      "category": "Inne",
+      "categoryIcon": "circle",
+      "method": "Karta Revolut",
+      "methodIcon": "credit-card",
+      "amount": -120.00
+    },
+    {
+      "id": "t11",
+      "date": "2026-04-20",
+      "time": "18:00",
+      "title": "Siłownia - Karnet",
+      "category": "Rozrywka",
+      "categoryIcon": "ticket",
+      "method": "Karta mBank",
+      "methodIcon": "credit-card",
+      "amount": -150.00
+    },
+    {
+      "id": "t12",
+      "date": "2026-04-18",
+      "time": "12:30",
+      "title": "Żabka - Napoje",
+      "category": "Zakupy",
+      "categoryIcon": "shopping-cart",
+      "method": "Karta Revolut",
+      "methodIcon": "credit-card",
+      "amount": -15.40
+    },
+    {
+      "id": "t13",
+      "date": "2026-04-15",
+      "time": "09:15",
+      "title": "Piekarnia",
+      "category": "Zakupy",
+      "categoryIcon": "shopping-cart",
+      "method": "Gotówka",
+      "methodIcon": "banknote",
+      "amount": -12.00
+    },
+    {
+      "id": "t14",
+      "date": "2026-04-12",
+      "time": "14:00",
+      "title": "Allegro - Akcesoria",
+      "category": "Zakupy",
+      "categoryIcon": "shopping-cart",
+      "method": "Blik",
+      "methodIcon": "blik",
+      "amount": -89.99
+    },
+    {
+      "id": "t15",
+      "date": "2026-04-05",
+      "time": "16:45",
+      "title": "Kawiarnia - Ciastko",
+      "category": "Rozrywka",
+      "categoryIcon": "ticket",
+      "method": "Karta mBank",
+      "methodIcon": "credit-card",
+      "amount": -18.50
+    }
+  ],
+  "transactions-summary": {
+    "totalIncome": 12400.00,
+    "totalExpenses": 5620.45,
+    "netBalance": 6779.55
+  },
+  "budget-status": {
+    "spentAmount": 3500,
+    "totalLimit": 5400,
+    "percentageUsed": 65
+  }
 }
