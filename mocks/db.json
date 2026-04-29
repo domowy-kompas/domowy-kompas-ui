@@ -13,9 +13,45 @@
     { "id": "6", "name": "Inne", "spent": 40, "limit": 200, "color": "var(--accent-primary)" }
   ],
   "goals": [
-    { "id": "1", "name": "Poduszka Finansowa", "current": 15000, "target": 30000, "color": "var(--success-color)" },
-    { "id": "2", "name": "Wakacje", "current": 2000, "target": 5000, "color": "var(--warning-color)" }
+    {
+      "id": "1",
+      "name": "Nowy Samochód",
+      "current": 45000,
+      "target": 60000,
+      "deadline": "Grudzień 2024",
+      "monthlyContribution": 1250,
+      "percentage": 75,
+      "image": "goal-car.png",
+      "category": "transport"
+    },
+    {
+      "id": "2",
+      "name": "Wakacje 2024",
+      "current": 4800,
+      "target": 12000,
+      "deadline": "Lipiec 2024",
+      "monthlyContribution": 800,
+      "percentage": 40,
+      "image": "vacation-goal.png",
+      "category": "travel"
+    },
+    {
+      "id": "3",
+      "name": "Poduszka Finansowa",
+      "current": 23000,
+      "target": 25000,
+      "deadline": "Marzec 2024",
+      "monthlyContribution": 200,
+      "percentage": 92,
+      "image": "cushion.png",
+      "category": "safety"
+    }
   ],
+  "savings-summary": {
+    "totalSavings": 42150.00,
+    "percentageChange": 12,
+    "dailyTip": "Małe kwoty regularnie odkładane tworzą wielkie możliwości. Automatyzacja przelewów to najprostszy sposób na sukces."
+  },
   "transactions": [
     {
       "id": "t1",

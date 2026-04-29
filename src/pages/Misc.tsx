@@ -1,14 +1,5 @@
 import type { ReactElement } from 'react'
 
-export function Goals(): ReactElement {
-  return (
-    <div>
-      <h1>Cele oszczędnościowe</h1>
-      <p>Śledź swoje cele oszczędnościowe.</p>
-    </div>
-  )
-}
-
 export function Reports(): ReactElement {
   return (
     <div>
