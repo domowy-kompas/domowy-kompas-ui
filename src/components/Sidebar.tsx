@@ -66,7 +66,7 @@ export function Sidebar(): ReactElement {
         ))}
       </nav>
       <div className="sidebar-bottom">
-        <button className="sidebar-bottom-btn sidebar-bottom-btn-primary" onClick={() => alert('Add transaction - TODO')}>
+        <button className="sidebar-bottom-btn sidebar-bottom-btn-primary" onClick={() => navigate('/transactions/create')}>
           <img src={plusIcon} alt="" className="nav-icon" />
           <span className="nav-label">Nowa transakcja</span>
         </button>

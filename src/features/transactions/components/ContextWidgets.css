@@ -1,0 +1,78 @@
+.context-widgets {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  margin-top: 32px;
+}
+
+.context-widget {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.widget-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.widget-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #006d5b;
+}
+
+.widget-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.widget-value {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #181c1c;
+}
+
+.widget-subvalue {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: #717171;
+}
+
+/* Progress Bar */
+.progress-container {
+  height: 6px;
+  background: #eef2f2;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: #006d5b;
+  border-radius: 3px;
+}
+
+/* Variants */
+.widget-warning .widget-title { color: #f59e0b; }
+.widget-warning .progress-bar { background: #f59e0b; }
+.widget-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #717171;
+}
+
+@media (max-width: 768px) {
+  .context-widgets {
+    grid-template-columns: 1fr;
+  }
+}

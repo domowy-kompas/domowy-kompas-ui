@@ -11,6 +11,7 @@ const ROUTE_NAMES: Record<string, string> = {
   '/reports': 'Raporty',
   '/help': 'Pomoc',
   '/settings': 'Ustawienia',
+  '/transactions/create': 'Dodaj transakcję',
 }
 
 function UserAvatar() {

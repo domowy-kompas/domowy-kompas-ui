@@ -18,6 +18,7 @@ export function ToastContainer({ notifications, removeNotification }: ToastConta
           message={notification.message}
           type={notification.type}
           duration={notification.duration}
+          link={notification.link}
           onClose={() => removeNotification(notification.id)}
         />
       ))}

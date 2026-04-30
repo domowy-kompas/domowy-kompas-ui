@@ -8,6 +8,7 @@ import { PublicLayout } from './components/PublicLayout'
 import { Layout } from './components/Layout'
 import { Dashboard } from './pages/Dashboard'
 import { Transactions } from './pages/Transactions'
+import { AddTransaction } from './pages/AddTransaction'
 import { Budgets } from './pages/Budgets'
 import { Goals } from './pages/Goals'
 import { Reports } from './pages/Reports'
@@ -19,9 +20,9 @@ import { LandingPage } from './pages/LandingPage'
 
 function App(): ReactElement {
   return (
-    <AuthProvider>
-      <NotificationProvider>
-        <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
+        <NotificationProvider>
           <Routes>
             <Route element={<PublicOnlyRoute />}>
               <Route element={<PublicLayout />}>
@@ -34,6 +35,7 @@ function App(): ReactElement {
               <Route element={<Layout />}>
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/transactions" element={<Transactions />} />
+                <Route path="/transactions/create" element={<AddTransaction />} />
                 <Route path="/budgets" element={<Budgets />} />
                 <Route path="/goals" element={<Goals />} />
                 <Route path="/reports" element={<Reports />} />
@@ -43,9 +45,9 @@ function App(): ReactElement {
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-        </BrowserRouter>
-      </NotificationProvider>
-    </AuthProvider>
+        </NotificationProvider>
+      </AuthProvider>
+    </BrowserRouter>
   )
 }
 

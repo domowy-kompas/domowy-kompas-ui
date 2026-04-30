@@ -5,4 +5,8 @@ export interface Notification {
   message: string;
   type: NotificationType;
   duration?: number;
+  link?: {
+    label: string;
+    to: string;
+  };
 }

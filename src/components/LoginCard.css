@@ -180,10 +180,11 @@
 }
 
 .form-group .label-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin-bottom: 8px;
 }
 
 .input-wrapper {

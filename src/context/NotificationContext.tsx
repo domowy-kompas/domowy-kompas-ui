@@ -4,7 +4,7 @@ import { ToastContainer } from '../components/Notifications/ToastContainer';
 import type { Notification, NotificationType } from '../types/notifications';
 
 interface NotificationContextValue {
-  showNotification: (message: string, type?: NotificationType, duration?: number) => void;
+  showNotification: (message: string, type?: NotificationType, duration?: number, link?: { label: string; to: string }) => void;
   removeNotification: (id: string) => void;
 }
 
@@ -18,9 +18,9 @@ export function NotificationProvider({ children }: { children: ReactNode }): Rea
   }, []);
 
   const showNotification = useCallback(
-    (message: string, type: NotificationType = 'info', duration = 5000) => {
+    (message: string, type: NotificationType = 'info', duration = 5000, link?: { label: string; to: string }) => {
       const id = Math.random().toString(36).substring(2, 9);
-      const newNotification: Notification = { id, message, type, duration };
+      const newNotification: Notification = { id, message, type, duration, link };
       
       setNotifications((prev) => [...prev, newNotification]);
     },
