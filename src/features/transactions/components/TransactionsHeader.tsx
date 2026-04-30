@@ -1,5 +1,4 @@
 import type { ReactElement } from 'react'
-
 interface Props {
   filters: {
     search: string
@@ -11,6 +10,7 @@ interface Props {
 }
 
 export function TransactionsHeader({ filters, updateFilters }: Props): ReactElement {
+
   return (
     <div className="transactions-header">
       <div className="filter-card">
