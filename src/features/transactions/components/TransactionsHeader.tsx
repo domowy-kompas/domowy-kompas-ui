@@ -6,7 +6,7 @@ interface Props {
     category: string
     type: string
   }
-  updateFilters: (filters: any) => void
+  updateFilters: (filters: Partial<Props['filters']>) => void
 }
 
 export function TransactionsHeader({ filters, updateFilters }: Props): ReactElement {

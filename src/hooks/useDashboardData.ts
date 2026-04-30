@@ -148,8 +148,9 @@ export function useDashboardData() {
           paymentMethod: 'Karta/Przelew',
         })))
 
-      } catch (err: any) {
-        setError(err.message || 'Wystąpił błąd podczas pobierania danych z serwera')
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Wystąpił błąd podczas pobierania danych z serwera'
+        setError(message)
       } finally {
         setIsLoading(false)
       }

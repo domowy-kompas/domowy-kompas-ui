@@ -1,4 +1,4 @@
-import { type ReactElement, useEffect, useState } from 'react';
+import { type ReactElement, useEffect, useState, useCallback } from 'react';
 import { CheckCircle, XCircle, Info, AlertTriangle, X, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { NotificationType } from '../../types/notifications';
@@ -25,18 +25,18 @@ const ICONS = {
 export function Toast({ message, type, onClose, duration = 5000, link }: ToastProps): ReactElement {
   const [isRemoving, setIsRemoving] = useState(false);
 
+  const handleClose = useCallback(() => {
+    setIsRemoving(true);
+    setTimeout(onClose, 300); // Wait for animation
+  }, [onClose]);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       handleClose();
     }, duration);
 
     return () => clearTimeout(timer);
-  }, [duration]);
-
-  const handleClose = () => {
-    setIsRemoving(true);
-    setTimeout(onClose, 300); // Wait for animation
-  };
+  }, [duration, handleClose]);
 
   return (
     <div className={`toast toast-${type} ${isRemoving ? 'removing' : ''}`} role="alert">

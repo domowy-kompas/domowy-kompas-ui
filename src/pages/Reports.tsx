@@ -146,7 +146,7 @@ export function Reports(): ReactElement {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value: any) => formatCurrency(Number(value))} />
+                  <Tooltip formatter={(value: number) => formatCurrency(value)} />
                 </PieChart>
               </ResponsiveContainer>
               <div className="donut-center-label">

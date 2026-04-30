@@ -35,15 +35,19 @@ export function useTransactions() {
       setSummary(summaryData)
       setBudget(budgetData)
 
-    } catch (err: any) {
-      setError(err.message || 'Wystąpił błąd podczas pobierania danych')
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Wystąpił błąd podczas pobierania danych'
+      setError(message)
     } finally {
       setIsLoading(false)
     }
   }, [])
 
   useEffect(() => {
-    loadData()
+    // Avoid synchronous setState by wrapping in then()
+    Promise.resolve().then(() => {
+      loadData()
+    })
   }, [loadData])
 
   // Frontend Filtering

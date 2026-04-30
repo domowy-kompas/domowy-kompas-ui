@@ -30,8 +30,13 @@ export interface ReportData {
   categories: ReportCategory[]
 }
 
+interface ReportsResponse {
+  historicalData: HistoricalData[]
+  [key: string]: ReportData | HistoricalData[]
+}
+
 export function useReportsData(period: string) {
-  const [fullData, setFullData] = useState<Record<string, ReportData> | null>(null)
+  const [fullData, setFullData] = useState<ReportsResponse | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -54,8 +59,8 @@ export function useReportsData(period: string) {
   }, [])
 
   return { 
-    data: fullData ? fullData[period] : null, 
-    historicalData: fullData ? (fullData as any).historicalData : [],
+    data: (fullData ? fullData[period] : null) as ReportData | null, 
+    historicalData: fullData ? fullData.historicalData : [],
     isLoading: isLoading || !fullData, 
     error 
   }

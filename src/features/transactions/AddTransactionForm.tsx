@@ -15,7 +15,6 @@ import {
   Loader2,
 } from 'lucide-react';
 import { useNotification } from '../../context/NotificationContext';
-import { ContextWidgets } from './components/ContextWidgets';
 import './AddTransactionForm.css';
 
 type TransactionType = 'expense' | 'income';
@@ -59,7 +58,7 @@ export function AddTransactionForm(): ReactElement {
       );
 
       navigate(-1);
-    } catch (err) {
+    } catch {
       showNotification('Błąd podczas zapisywania transakcji', 'error');
     } finally {
       setIsSaving(false);

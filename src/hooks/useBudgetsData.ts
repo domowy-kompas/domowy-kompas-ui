@@ -34,8 +34,9 @@ export function useBudgetsData() {
 
         setBudgets(budgetsData)
         setSummary(summaryData)
-      } catch (err: any) {
-        setError(err.message || 'Wystąpił błąd podczas pobierania danych budżetowych')
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Wystąpił błąd podczas pobierania danych budżetowych'
+        setError(message)
       } finally {
         setIsLoading(false)
       }

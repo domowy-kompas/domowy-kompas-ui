@@ -20,6 +20,7 @@ export async function fetchApi<T>(endpoint: string, options?: RequestInit): Prom
       const errorData = await response.json()
       errorMessage = errorData.message || errorMessage
     } catch {
+      // Ignore parse errors, fallback to default message
     }
     throw new Error(errorMessage)
   }
