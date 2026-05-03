@@ -1,4 +1,5 @@
 export interface AuthUser {
+  uid: string
   id: string
   email: string
   name: string

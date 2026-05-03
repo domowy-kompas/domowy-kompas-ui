@@ -1,27 +1,40 @@
 import type { ReactElement } from 'react'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import compassIcon from '../assets/login/compass.png'
+import { getFirebaseAuthErrorMessage } from '../utils/firebaseErrors'
 import '../components/LoginCard.css'
+import { useNotification } from '../context/NotificationContext'
 
 export function Register(): ReactElement {
   const navigate = useNavigate()
-  const { register, isLoading } = useAuth()
+  const { register, isSubmitting } = useAuth()
   const [name, setName] = useState('')
   const [surname, setSurname] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
+  
+  const { showNotification } = useNotification()
+
+  const isEmailValid = useMemo(() => /^\S+@\S+\.\S+$/.test(email), [email])
+  const isPasswordValid = useMemo(() => password.length >= 6, [password])
+  const isNameValid = useMemo(() => name.trim().length > 0, [name])
+  const isSurnameValid = useMemo(() => surname.trim().length > 0, [surname])
+  const isFormValid = isEmailValid && isPasswordValid && isNameValid && isSurnameValid
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
+    if (!isFormValid) {
+      showNotification('Proszę wypełnić poprawnie wszystkie pola.', 'error')
+      return
+    }
+
     try {
       await register({ email, password, name, surname })
       navigate('/dashboard', { replace: true })
-    } catch {
-      setError('Rejestracja nie powiodła się. Spróbuj ponownie.')
+    } catch (authError) {
+      showNotification(getFirebaseAuthErrorMessage(authError), 'error')
     }
   }
 
@@ -64,7 +77,7 @@ export function Register(): ReactElement {
           Wypełnij poniższe dane, aby dołączyć do naszej społeczności.
         </p>
 
-        {error && <p className="form-error">{error}</p>}
+        {/* Errors shown via notifications */}
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
@@ -145,10 +158,20 @@ export function Register(): ReactElement {
 
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={!isFormValid || isSubmitting}
             className="submit-button"
+            aria-disabled={!isFormValid || isSubmitting}
           >
-            {isLoading ? 'Tworzenie konta...' : 'Zarejestruj się'}
+            {isSubmitting ? (
+              <>
+                <svg className="button-spinner" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="10" cy="10" r="8" stroke="white" strokeWidth="2" strokeDasharray="40,40" strokeDashoffset="20" />
+                </svg>
+                Tworzenie konta...
+              </>
+            ) : (
+              'Zarejestruj się'
+            )}
           </button>
         </form>
 

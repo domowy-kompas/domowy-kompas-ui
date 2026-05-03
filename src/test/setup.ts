@@ -1,4 +1,48 @@
 import '@testing-library/jest-dom/vitest'
+import { vi } from 'vitest'
+
+const mockFirebaseUser = {
+  uid: '1',
+  email: 'test@example.com',
+  displayName: 'Test User',
+  getIdToken: vi.fn().mockResolvedValue('mock-token'),
+}
+
+vi.mock('firebase/auth', async () => {
+  const actual = await vi.importActual<typeof import('firebase/auth')>('firebase/auth')
+
+  return {
+    ...actual,
+    browserLocalPersistence: {},
+    browserSessionPersistence: {},
+    getAuth: vi.fn(() => ({ currentUser: mockFirebaseUser })),
+    setPersistence: vi.fn().mockResolvedValue(undefined),
+    signInWithEmailAndPassword: vi.fn().mockResolvedValue({ user: mockFirebaseUser }),
+    createUserWithEmailAndPassword: vi.fn().mockResolvedValue({ user: mockFirebaseUser }),
+    signOut: vi.fn().mockResolvedValue(undefined),
+    updateProfile: vi.fn().mockResolvedValue(undefined),
+    sendPasswordResetEmail: vi.fn().mockResolvedValue(undefined),
+    onAuthStateChanged: vi.fn((_, callback) => {
+      callback(mockFirebaseUser)
+      return vi.fn()
+    }),
+  }
+})
+
+vi.mock('firebase/firestore', async () => {
+  const actual = await vi.importActual<typeof import('firebase/firestore')>('firebase/firestore')
+
+  return {
+    ...actual,
+    doc: vi.fn(),
+    getDoc: vi.fn().mockResolvedValue({
+      exists: () => true,
+      data: () => ({ name: 'Test', surname: 'User' }),
+    }),
+    setDoc: vi.fn().mockResolvedValue(undefined),
+    serverTimestamp: vi.fn(),
+  }
+})
 
 interface LocalStorageMock {
   getItem: (key: string) => string | null
@@ -16,7 +60,6 @@ const mockUser = {
 const localStorageMock: LocalStorageMock = {
   getItem: (key: string) => {
     if (key === 'auth_user') return JSON.stringify(mockUser)
-    if (key === 'auth_token') return 'mock-token'
     return null
   },
   setItem: () => {},

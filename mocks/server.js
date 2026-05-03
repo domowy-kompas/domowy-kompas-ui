@@ -12,9 +12,9 @@ const middlewares = jsonServer.defaults()
 server.use(middlewares)
 server.use(jsonServer.bodyParser)
 
-// Add random sleep between 1-5 seconds
+// Add random sleep between 200-800ms for a more responsive dev experience
 server.use((req, res, next) => {
-  const delay = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000
+  const delay = Math.floor(Math.random() * (800 - 200 + 1)) + 200
   console.log(`[Opóźnienie] Dodaję ${delay}ms do zapytania ${req.method} ${req.originalUrl}`)
   setTimeout(next, delay)
 })

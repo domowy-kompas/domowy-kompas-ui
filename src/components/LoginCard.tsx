@@ -1,30 +1,52 @@
 import type { ReactElement } from 'react'
-import { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useState, useMemo } from 'react'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useNotification } from '../context/NotificationContext'
 import compassIcon from '../assets/login/compass.png'
+import { sendPasswordReset } from '../api/auth'
+import { getFirebaseAuthErrorMessage } from '../utils/firebaseErrors'
 import './LoginCard.css'
 
 export function LoginCard(): ReactElement {
   const navigate = useNavigate()
   const location = useLocation()
-  const { login, isLoading } = useAuth()
+  const { login, isSubmitting } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  const [error, setError] = useState('')
+  
   const [rememberMe, setRememberMe] = useState(false)
+  const { showNotification } = useNotification()
+
+  const isEmailValid = useMemo(() => /^\S+@\S+\.\S+$/.test(email), [email])
+  const isPasswordValid = useMemo(() => password.length >= 6, [password])
+  const isFormValid = isEmailValid && isPasswordValid
 
   const from = location.state?.from?.pathname || '/dashboard'
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
     try {
-      await login({ email, password })
+      await login({ email, password }, rememberMe)
       navigate(from, { replace: true })
-    } catch {
-      setError('Nieprawidłowy email lub hasło')
+    } catch (authError) {
+      const message = getFirebaseAuthErrorMessage(authError)
+      showNotification(message, 'error')
+    }
+  }
+
+  const handlePasswordReset = async () => {
+    if (!email || !isEmailValid) {
+      showNotification('Podaj poprawny adres email, aby zresetować hasło.', 'error')
+      return
+    }
+
+    try {
+      await sendPasswordReset(email)
+      showNotification('Wysłaliśmy link do resetu hasła na podany adres email.', 'success')
+    } catch (authError) {
+      showNotification(getFirebaseAuthErrorMessage(authError), 'error')
     }
   }
 
@@ -67,7 +89,7 @@ export function LoginCard(): ReactElement {
           Zaloguj się, aby kontynuować zarządzanie swoim portfelem.
         </p>
 
-        {error && <p className="form-error">{error}</p>}
+        {/* Notifications are shown via Toasts; keep local inline messages for accessibility if needed */}
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
@@ -96,12 +118,9 @@ export function LoginCard(): ReactElement {
               <label htmlFor="password" className="form-label">
                 Hasło
               </label>
-              <a href="#" className="forgot-password" onClick={(e) => {
-                e.preventDefault();
-                alert('Funkcja odzyskiwania hasła nie została jeszcze zaimplementowana');
-              }}>
+              <button type="button" className="forgot-password" onClick={handlePasswordReset}>
                 Zapomniałeś hasła?
-              </a>
+              </button>
             </div>
             <div className="input-wrapper password-wrapper">
               <svg className="input-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -153,12 +172,13 @@ export function LoginCard(): ReactElement {
 
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={!isFormValid || isSubmitting}
             className="submit-button"
+            aria-disabled={!isFormValid || isSubmitting}
           >
-            {isLoading ? (
+            {isSubmitting ? (
               <>
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg className="button-spinner" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="10" cy="10" r="8" stroke="white" strokeWidth="2" strokeDasharray="40,40" strokeDashoffset="20" />
                 </svg>
                 Logowanie...
@@ -177,7 +197,7 @@ export function LoginCard(): ReactElement {
         </form>
 
         <p className="auth-link">
-          Nie masz konta? <a href="/register">Zarejestruj się</a>
+          Nie masz konta? <Link to="/register">Zarejestruj się</Link>
         </p>
       </div>
     </div>
