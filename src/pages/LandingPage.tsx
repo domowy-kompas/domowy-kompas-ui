@@ -15,6 +15,7 @@ import savingGoalsIcon from '../assets/landing-page/saving-goals.png'
 import avatar1 from '../assets/landing-page/avatar1.png'
 import avatar2 from '../assets/landing-page/avatar2.png'
 import avatar3 from '../assets/landing-page/avatar3.png'
+import vectorImg from '../assets/landing-page/Vector.png'
 
 export function LandingPage(): ReactElement {
   return (
@@ -158,6 +159,7 @@ export function LandingPage(): ReactElement {
         </section>
         <section className="cta-section">
           <div className="cta-card">
+            <img src={vectorImg} aria-hidden="true" className="hero-blob" alt="" />
             <h2>Dołącz do tysięcy użytkowników, którzy oszczędzają więcej każdego miesiąca.</h2>
             <p className="landing-page-testimonial-text">
               "Domowy Kompas zmienił sposób, w jaki patrzę na pieniądze. W końcu

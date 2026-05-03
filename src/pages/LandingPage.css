@@ -429,6 +429,34 @@
   justify-content: center;
 }
 
+.cta-card h2,
+.landing-page-testimonial-text,
+.landing-page-testimonial-author,
+.btn-cta-white {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-blob {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150%;
+  opacity: 0.1;
+  height: 75%;
+  z-index: 0;
+  pointer-events: none;
+  object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .hero-blob {
+    width: 250%;
+    top: 35%;
+  }
+}
+
 /* Background Pattern/Glow */
 .cta-card::before {
   content: '';
@@ -443,8 +471,9 @@
 }
 
 .cta-card h2 {
+  font-family: 'Inter', sans-serif;
   font-size: 48px;
-  font-weight: 700;
+  font-weight: 400;
   max-width: 800px;
   margin: 0 auto 32px;
   line-height: 1.2;
