@@ -1,15 +1,15 @@
 import type { ReactElement } from 'react'
-interface Props {
+interface TransactionsHeaderProps {
   filters: {
     search: string
     period: string
     category: string
     type: string
   }
-  updateFilters: (filters: Partial<Props['filters']>) => void
+  updateFilters: (filters: Partial<TransactionsHeaderProps['filters']>) => void
 }
 
-export function TransactionsHeader({ filters, updateFilters }: Props): ReactElement {
+export function TransactionsHeader({ filters, updateFilters }: TransactionsHeaderProps): ReactElement {
 
   return (
     <div className="transactions-header">

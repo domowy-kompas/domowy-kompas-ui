@@ -2,7 +2,7 @@ import type { ReactElement } from 'react'
 import { TransactionRow } from './TransactionRow'
 import type { Transaction } from '../types'
 
-interface Props {
+interface TransactionsListProps {
   transactions: Transaction[]
   pagination: {
     page: number
@@ -13,7 +13,7 @@ interface Props {
   }
 }
 
-export function TransactionsList({ transactions, pagination }: Props): ReactElement {
+export function TransactionsList({ transactions, pagination }: TransactionsListProps): ReactElement {
   const startIdx = (pagination.page - 1) * pagination.pageSize + 1
   const endIdx = Math.min(pagination.page * pagination.pageSize, pagination.totalCount)
 

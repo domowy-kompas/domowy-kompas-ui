@@ -1,13 +1,13 @@
 import type { ReactElement } from 'react'
 import type { TransactionsSummary } from '../types'
+import { formatCurrencySigned } from '../../../utils/format'
 
-interface Props {
+interface SummaryWidgetProps {
   summary: TransactionsSummary | null
 }
 
-export function SummaryWidget({ summary }: Props): ReactElement {
-  const formatCurrency = (val: number) =>
-    new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN', signDisplay: 'always' }).format(val)
+export function SummaryWidget({ summary }: SummaryWidgetProps): ReactElement {
+  const formatCurrency = (val: number) => formatCurrencySigned(val)
 
   if (!summary) return <div className="summary-card">Ładowanie podsumowania...</div>
 

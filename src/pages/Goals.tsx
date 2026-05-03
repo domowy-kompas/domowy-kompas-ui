@@ -2,6 +2,7 @@ import type { ReactElement } from 'react'
 import { useGoalsData } from '../hooks/useGoalsData'
 import { GoalsSummarySkeleton, GoalsGridSkeleton } from './GoalsSkeletons'
 import './Goals.css'
+import { formatCurrency } from '../utils/format'
 
 // Assets
 import savingSumIcon from '../assets/goals/saving-sum.png'
@@ -36,8 +37,7 @@ const GOAL_ICONS: Record<string, string> = {
 export function Goals(): ReactElement {
   const { goals, summary, isLoading, error } = useGoalsData()
 
-  const formatCurrency = (val: number) =>
-    new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(val)
+  // use centralized formatter
 
   if (error) {
     return <div className="goals-page">Błąd: {error}</div>
@@ -51,8 +51,8 @@ export function Goals(): ReactElement {
         <section className="goals-summary-row">
           <div className="goals-summary-card">
             <div className="summary-content-wrapper">
-              <div className="summary-icon-box">
-                <img src={savingSumIcon} alt="" />
+                <div className="summary-icon-box">
+                <img src={savingSumIcon} aria-hidden="true" />
               </div>
               <div className="summary-text-group">
                 <span className="label">Suma oszczędności</span>
@@ -69,7 +69,7 @@ export function Goals(): ReactElement {
             <div className="tip-content">
               <div className="tip-content-header">
                 <div className="tip-icon">
-                  <img src={tipIcon} alt="" />
+                  <img src={tipIcon} aria-hidden="true" />
                 </div>
                 <span>Codzienna porada</span>
               </div>
@@ -77,7 +77,7 @@ export function Goals(): ReactElement {
                 "{summary?.dailyTip}"
               </p>
             </div>
-            <img src={tipIllustration} alt="" className="tip-illustration" />
+            <img src={tipIllustration} aria-hidden="true" className="tip-illustration" />
           </div>
         </section>
       )}
@@ -95,7 +95,7 @@ export function Goals(): ReactElement {
               <div className="goal-card-content">
                 <div className="goal-card-header">
                   <h3>{goal.name}</h3>
-                  <img src={GOAL_ICONS[goal.image]} alt="" className="goal-category-icon" />
+                  <img src={GOAL_ICONS[goal.image]} aria-hidden="true" className="goal-category-icon" />
                 </div>
 
                 <div className="goal-progress-wrapper">
@@ -115,11 +115,11 @@ export function Goals(): ReactElement {
 
                 <div className="goal-card-footer">
                   <div className="footer-item">
-                    <img src={goalCalendarIcon} alt="" className="footer-icon" />
+                    <img src={goalCalendarIcon} aria-hidden="true" className="footer-icon" />
                     <span>{goal.deadline}</span>
                   </div>
                   <div className="footer-item">
-                    <img src={goalCashIcon} alt="" className="footer-icon" />
+                    <img src={goalCashIcon} aria-hidden="true" className="footer-icon" />
                     <span>{goal.monthlyContribution} PLN/mc</span>
                   </div>
                 </div>
@@ -129,7 +129,7 @@ export function Goals(): ReactElement {
 
           <div className="add-goal-card">
             <div className="plus-circle">
-              <img src={plusIcon} alt="" />
+              <img src={plusIcon} aria-hidden="true" />
             </div>
             <h3>Dodaj nowy cel</h3>
             <p>Masz nowe marzenie? Zacznij na nie oszczędzać już dziś.</p>

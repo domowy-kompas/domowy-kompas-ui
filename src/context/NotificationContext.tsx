@@ -19,9 +19,9 @@ export function NotificationProvider({ children }: { children: ReactNode }): Rea
 
   const showNotification = useCallback(
     (message: string, type: NotificationType = 'info', duration = 5000, link?: { label: string; to: string }) => {
-      const id = Math.random().toString(36).substring(2, 9);
+      const id = typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : Math.random().toString(36).substring(2, 9);
       const newNotification: Notification = { id, message, type, duration, link };
-      
+
       setNotifications((prev) => [...prev, newNotification]);
     },
     []

@@ -1,11 +1,11 @@
 import type { ReactElement } from 'react'
 import type { BudgetStatus } from '../types'
 
-interface Props {
+interface BudgetWidgetProps {
   budget: BudgetStatus | null
 }
 
-export function BudgetWidget({ budget }: Props): ReactElement {
+export function BudgetWidget({ budget }: BudgetWidgetProps): ReactElement {
   if (!budget) return <div className="budget-card">Ładowanie budżetu...</div>
 
   return (

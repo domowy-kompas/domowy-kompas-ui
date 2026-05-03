@@ -1,11 +1,12 @@
 import type { ReactElement } from 'react'
 import type { Transaction } from '../types'
+import { formatCurrencySigned } from '../../../utils/format'
 
-interface Props {
+interface TransactionRowProps {
   transaction: Transaction
 }
 
-export function TransactionRow({ transaction }: Props): ReactElement {
+export function TransactionRow({ transaction }: TransactionRowProps): ReactElement {
   const isPositive = transaction.amount > 0
   
   const getIconColor = (category: string) => {
@@ -21,14 +22,7 @@ export function TransactionRow({ transaction }: Props): ReactElement {
 
   const iconStyle = getIconColor(transaction.category)
 
-  const formatAmount = (amount: number) => {
-    const formatted = new Intl.NumberFormat('pl-PL', { 
-      style: 'currency', 
-      currency: 'PLN',
-      signDisplay: 'always'
-    }).format(amount)
-    return formatted
-  }
+  const formatAmount = (amount: number) => formatCurrencySigned(amount)
 
   const renderIcon = (name: string) => {
     switch (name) {

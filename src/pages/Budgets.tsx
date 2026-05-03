@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useBudgetsData } from '../hooks/useBudgetsData'
 import { BudgetsSummarySkeleton, BudgetsGridSkeleton } from './BudgetsSkeletons'
 import './Budgets.css'
+import { formatCurrency } from '../utils/format'
 
 // Icons
 import calendarIcon from '../assets/budgets/calendar.png'
@@ -28,8 +29,7 @@ export function Budgets(): ReactElement {
 
   const hasExceeded = budgets.some(b => b.spent > b.limit)
 
-  const formatCurrency = (val: number) => 
-    new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(val)
+  // use centralized formatter from utils
 
   const getStatusColor = (percentage: number) => {
     if (percentage >= 100) return 'red'
@@ -59,7 +59,7 @@ export function Budgets(): ReactElement {
           <p>Przeglądaj i zarządzaj swoimi planami wydatków.</p>
         </div>
         <button className="plan-month-btn" disabled={isLoading}>
-          <img src={calendarIcon} alt="" />
+          <img src={calendarIcon} aria-hidden="true" />
           Zaplanuj miesiąc
         </button>
       </header>

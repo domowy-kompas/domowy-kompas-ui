@@ -3,9 +3,7 @@ import type { ReactNode, ReactElement } from 'react'
 import { createContext, useContext, useState, useCallback, useMemo } from 'react'
 import type { AuthUser, LoginCredentials, RegisterCredentials } from '../types/auth'
 import { login as apiLogin, register as apiRegister, logout as apiLogout } from '../api/auth'
-
-const TOKEN_KEY = 'auth_token'
-const USER_KEY = 'auth_user'
+import { AUTH_TOKEN_KEY, AUTH_USER_KEY } from '../constants/storage'
 
 interface AuthContextValue {
   user: AuthUser | null
@@ -20,12 +18,12 @@ const AuthContext = createContext<AuthContextValue | null>(null)
 export { AuthContext }
 
 function getStoredUser(): AuthUser | null {
-  const stored = localStorage.getItem(USER_KEY)
+  const stored = localStorage.getItem(AUTH_USER_KEY)
   return stored ? JSON.parse(stored) : null
 }
 
 function getStoredToken(): string | null {
-  return localStorage.getItem(TOKEN_KEY)
+  return localStorage.getItem(AUTH_TOKEN_KEY)
 }
 
 function getInitialUser(): AuthUser | null {

@@ -42,7 +42,7 @@ export function Sidebar(): ReactElement {
     <aside className="sidebar">
       <div className="sidebar-header">
         <div className="sidebar-brand">
-          <img src={appIcon} alt="" className="sidebar-icon" />
+          <img src={appIcon} aria-hidden="true" className="sidebar-icon" />
           <div className="sidebar-titles">
             <h1 className="sidebar-title">Domowy Kompas</h1>
             <p className="sidebar-subtitle">Przejrzystość finansowa</p>
@@ -58,7 +58,7 @@ export function Sidebar(): ReactElement {
           >
             {({ isActive }) => (
               <>
-                <img src={isActive ? item.iconGreen : item.iconWhite} alt="" className="nav-icon" />
+                <img src={isActive ? item.iconGreen : item.iconWhite} aria-hidden="true" className="nav-icon" />
                 <span className="nav-label">{item.label}</span>
               </>
             )}
@@ -67,19 +67,19 @@ export function Sidebar(): ReactElement {
       </nav>
       <div className="sidebar-bottom">
         <button className="sidebar-bottom-btn sidebar-bottom-btn-primary" onClick={() => navigate('/transactions/create')}>
-          <img src={plusIcon} alt="" className="nav-icon" />
+          <img src={plusIcon} aria-hidden="true" className="nav-icon" />
           <span className="nav-label">Nowa transakcja</span>
         </button>
         <NavLink to="/settings" className={({ isActive }) => (isActive ? 'sidebar-bottom-btn active' : 'sidebar-bottom-btn')}>
           {({ isActive }) => (
             <>
-              <img src={isActive ? ustawieniaGreen : ustawieniaWhite} alt="" className="nav-icon" />
+              <img src={isActive ? ustawieniaGreen : ustawieniaWhite} aria-hidden="true" className="nav-icon" />
               <span className="nav-label">Ustawienia</span>
             </>
           )}
         </NavLink>
         <button className="sidebar-bottom-btn" onClick={handleLogout}>
-          <img src={logoutIcon} alt="" className="nav-icon" />
+          <img src={logoutIcon} aria-hidden="true" className="nav-icon" />
           <span className="nav-label">Wyloguj</span>
         </button>
       </div>

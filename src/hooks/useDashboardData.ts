@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { fetchApi } from '../api/client'
+import { formatCurrency } from '../utils/format'
 
 // API Types
 interface ApiSummary {
@@ -69,8 +70,7 @@ export function useDashboardData() {
           fetchApi<ApiTransaction[]>('/transactions?_sort=date&_order=desc&_limit=5'),
         ])
 
-        const formatCurrency = (val: number) =>
-          new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(val)
+        // use centralized formatter
 
         // 1. Map KPI
         setKpiData([

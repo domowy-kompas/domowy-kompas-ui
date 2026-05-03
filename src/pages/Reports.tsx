@@ -4,6 +4,7 @@ import {
   PieChart, Pie, Cell 
 } from 'recharts'
 import { useReportsData } from '../hooks/useReportsData'
+import { formatCurrency } from '../utils/format'
 import { ReportsGridSkeleton } from './ReportsSkeletons'
 import './Reports.css'
 
@@ -26,8 +27,7 @@ export function Reports(): ReactElement {
   const [period, setPeriod] = useState('Miesiąc')
   const { data, historicalData, isLoading, error } = useReportsData(period)
 
-  const formatCurrency = (val: number) => 
-    new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(val)
+  // use centralized formatter
 
   if (error) return <div className="reports-page">Błąd: {error}</div>
 
@@ -178,7 +178,7 @@ export function Reports(): ReactElement {
               {data?.categories.map((cat, index) => (
                 <div key={index} className="analysis-item">
                   <div className="category-icon-box">
-                    <img src={ICON_MAP[cat.icon]} alt="" />
+                    <img src={ICON_MAP[cat.icon]} aria-hidden="true" />
                   </div>
                   <div className="analysis-content">
                     <div className="analysis-header">

@@ -1,8 +1,6 @@
 import type { AuthUser, LoginCredentials, RegisterCredentials } from '../types/auth'
 import { fetchApi } from './client'
-
-const TOKEN_KEY = 'auth_token'
-const USER_KEY = 'auth_user'
+import { AUTH_TOKEN_KEY, AUTH_USER_KEY } from '../constants/storage'
 
 interface AuthResponse {
   token: string
@@ -15,8 +13,8 @@ export async function login(credentials: LoginCredentials): Promise<AuthResponse
     body: JSON.stringify(credentials),
   })
 
-  localStorage.setItem(TOKEN_KEY, data.token)
-  localStorage.setItem(USER_KEY, JSON.stringify(data.user))
+  localStorage.setItem(AUTH_TOKEN_KEY, data.token)
+  localStorage.setItem(AUTH_USER_KEY, JSON.stringify(data.user))
   
   return data
 }
@@ -27,15 +25,15 @@ export async function register(credentials: RegisterCredentials): Promise<AuthRe
     body: JSON.stringify(credentials),
   })
 
-  localStorage.setItem(TOKEN_KEY, data.token)
-  localStorage.setItem(USER_KEY, JSON.stringify(data.user))
+  localStorage.setItem(AUTH_TOKEN_KEY, data.token)
+  localStorage.setItem(AUTH_USER_KEY, JSON.stringify(data.user))
   
   return data
 }
 
 export function logout(): void {
-  localStorage.removeItem(TOKEN_KEY)
-  localStorage.removeItem(USER_KEY)
+  localStorage.removeItem(AUTH_TOKEN_KEY)
+  localStorage.removeItem(AUTH_USER_KEY)
   // Optional: ping server to logout
   // fetchApi('/auth/logout', { method: 'POST' }).catch(() => {})
 }
