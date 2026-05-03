@@ -34,6 +34,7 @@ describe('App', () => {
     const transactionLink = sidebar.querySelector('a[href="/transactions"]')
     await user.click(transactionLink!)
 
-    expect(screen.getByRole('heading', { name: /transactions/i })).toBeInTheDocument()
+    // Transactions page loads content asynchronously; wait for a stable element
+    await screen.findByPlaceholderText(/np. zakupy spożywcze/i)
   })
 })

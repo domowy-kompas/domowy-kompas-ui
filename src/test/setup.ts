@@ -25,7 +25,10 @@ const localStorageMock: LocalStorageMock = {
 }
 globalThis.localStorage = localStorageMock as unknown as Storage
 
-const mockFetch = async (_input: RequestInfo | URL, init?: RequestInit) => {
+const mockFetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+  const url = typeof input === 'string' ? input : input instanceof URL ? input.href : (input as Request).url
+
+  // Handle POST auth flows
   if (init?.method === 'POST') {
     return new Response(JSON.stringify({ token: 'mock-token', user: mockUser }), {
       status: 200,
@@ -33,7 +36,33 @@ const mockFetch = async (_input: RequestInfo | URL, init?: RequestInit) => {
     })
   }
 
-  return new Response('', { status: 200 })
+  // Basic routing for common endpoints used in components
+  if (url.includes('/transactions-summary')) {
+    return new Response(JSON.stringify({ totalIncome: 0, totalExpenses: 0, netBalance: 0 }), { status: 200, headers: { 'Content-Type': 'application/json' } })
+  }
+
+  if (url.includes('/transactions')) {
+    return new Response(JSON.stringify([]), { status: 200, headers: { 'Content-Type': 'application/json' } })
+  }
+
+  if (url.includes('/budgets')) {
+    return new Response(JSON.stringify([]), { status: 200, headers: { 'Content-Type': 'application/json' } })
+  }
+
+  if (url.includes('/goals')) {
+    return new Response(JSON.stringify([]), { status: 200, headers: { 'Content-Type': 'application/json' } })
+  }
+
+  if (url.includes('/summary')) {
+    return new Response(JSON.stringify({ totalBalance: 0, monthlyIncome: 0, monthlyExpenses: 0 }), { status: 200, headers: { 'Content-Type': 'application/json' } })
+  }
+
+  if (url.includes('/budget-status')) {
+    return new Response(JSON.stringify({ percentageUsed: 0, spentAmount: 0, totalLimit: 0 }), { status: 200, headers: { 'Content-Type': 'application/json' } })
+  }
+
+  // Default: return empty JSON object
+  return new Response(JSON.stringify({}), { status: 200, headers: { 'Content-Type': 'application/json' } })
 }
 
 globalThis.fetch = mockFetch

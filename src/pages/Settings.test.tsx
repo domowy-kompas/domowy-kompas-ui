@@ -9,11 +9,13 @@ function renderWithRouter(ui: React.ReactElement) {
 describe('Settings', () => {
   it('renders heading', () => {
     renderWithRouter(<Settings />)
-    expect(screen.getByRole('heading', { name: /ustawienia/i })).toBeInTheDocument()
+    // Match exact top-level heading text to avoid matching subsection headings
+    expect(screen.getByRole('heading', { name: /^ustawienia$/i })).toBeInTheDocument()
   })
 
   it('renders description', () => {
     renderWithRouter(<Settings />)
-    expect(screen.getByText(/zarządzaj ustawieniami aplikacji/i)).toBeInTheDocument()
+    // The settings page copy is in Polish — assert on a stable substring
+    expect(screen.getByText(/zarządzaj swoim profilem/i)).toBeInTheDocument()
   })
 })

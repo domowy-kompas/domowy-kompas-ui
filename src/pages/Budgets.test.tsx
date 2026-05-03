@@ -14,6 +14,6 @@ describe('Budgets', () => {
 
   it('renders description', () => {
     renderWithRouter(<Budgets />)
-    expect(screen.getByText(/zarządzaj swoimi budżetami/i)).toBeInTheDocument()
+    expect(screen.getByText(/przeglądaj i zarządzaj swoimi/i)).toBeInTheDocument()
   })
 })

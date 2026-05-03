@@ -9,11 +9,13 @@ function renderWithRouter(ui: React.ReactElement) {
 describe('Transactions', () => {
   it('renders heading', () => {
     renderWithRouter(<Transactions />)
-    expect(screen.getByRole('heading', { name: /transactions/i })).toBeInTheDocument()
+    // Transactions page no longer has a top-level heading; assert presence of search input instead
+    expect(screen.getByPlaceholderText(/np. zakupy spożywcze/i)).toBeInTheDocument()
   })
 
   it('renders description', () => {
     renderWithRouter(<Transactions />)
-    expect(screen.getByText(/view and manage your transactions/i)).toBeInTheDocument()
+    // Assert that the period selector is present as part of the header UI
+    expect(screen.getByText(/okres/i)).toBeInTheDocument()
   })
 })
