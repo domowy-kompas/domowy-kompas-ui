@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { getGoals } from '../api/firestore'
+import { useAuth } from '../context/AuthContext'
 
 export interface Goal {
   id: string
@@ -19,6 +21,7 @@ export interface SavingsSummary {
 }
 
 export function useGoalsData() {
+  const { user } = useAuth()
   const [goals, setGoals] = useState<Goal[]>([])
   const [summary, setSummary] = useState<SavingsSummary | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -26,21 +29,21 @@ export function useGoalsData() {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!user) return
+
       try {
         setIsLoading(true)
-        // Simulate loading like the mock server middleware does
-        const [goalsRes, summaryRes] = await Promise.all([
-          fetch('http://localhost:3001/goals'),
-          fetch('http://localhost:3001/savings-summary')
-        ])
+        setError(null)
 
-        if (!goalsRes.ok || !summaryRes.ok) throw new Error('Błąd pobierania danych')
-
-        const goalsData = await goalsRes.json()
-        const summaryData = await summaryRes.json()
-
+        const goalsData = await getGoals(user.uid)
         setGoals(goalsData)
-        setSummary(summaryData)
+        
+        const totalSavings = goalsData.reduce((acc, g) => acc + g.current, 0)
+        setSummary({
+          totalSavings,
+          percentageChange: 0,
+          dailyTip: "Twoje oszczędności rosną! Pamiętaj o regularnych wpłatach."
+        })
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Wystąpił błąd')
       } finally {
@@ -49,7 +52,7 @@ export function useGoalsData() {
     }
 
     fetchData()
-  }, [])
+  }, [user])
 
   return { goals, summary, isLoading, error }
 }

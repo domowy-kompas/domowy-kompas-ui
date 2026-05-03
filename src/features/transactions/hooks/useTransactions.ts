@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { fetchApi } from '../../../api/client'
+import { getTransactions, getBudgets } from '../../../api/firestore'
+import { useAuth } from '../../../context/AuthContext'
 import type { Transaction, TransactionsSummary, BudgetStatus } from '../types'
 
 export function useTransactions() {
+  const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -20,20 +22,31 @@ export function useTransactions() {
   const pageSize = 4
 
   const loadData = useCallback(async () => {
+    if (!user) return
+
     try {
       setIsLoading(true)
       setError(null)
 
-      // Fetch all data for frontend processing
-      const [txData, summaryData, budgetData] = await Promise.all([
-        fetchApi<Transaction[]>('/transactions'),
-        fetchApi<TransactionsSummary>('/transactions-summary'),
-        fetchApi<BudgetStatus>('/budget-status')
+      // Fetch from Firestore
+      const [txData, budgetsData] = await Promise.all([
+        getTransactions(user.uid),
+        getBudgets(user.uid)
       ])
 
       setAllTransactions(txData)
-      setSummary(summaryData)
-      setBudget(budgetData)
+
+      // Calculate summary locally
+      const totalIncome = txData.filter(t => t.amount > 0).reduce((acc, t) => acc + t.amount, 0)
+      const totalExpenses = Math.abs(txData.filter(t => t.amount < 0).reduce((acc, t) => acc + t.amount, 0))
+      const netBalance = totalIncome - totalExpenses
+      setSummary({ totalIncome, totalExpenses, netBalance })
+
+      // Calculate budget status from budgets
+      const spentAmount = budgetsData.reduce((acc, b) => acc + b.spent, 0)
+      const totalLimit = budgetsData.reduce((acc, b) => acc + b.limit, 0)
+      const percentageUsed = totalLimit > 0 ? Math.round((spentAmount / totalLimit) * 100) : 0
+      setBudget({ spentAmount, totalLimit, percentageUsed })
 
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Wystąpił błąd podczas pobierania danych'
@@ -41,14 +54,14 @@ export function useTransactions() {
     } finally {
       setIsLoading(false)
     }
-  }, [])
+  }, [user])
 
   useEffect(() => {
-    // Avoid synchronous setState by wrapping in then()
     Promise.resolve().then(() => {
       loadData()
     })
   }, [loadData])
+// ... (rest of hook unchanged)
 
   // Frontend Filtering
   const filteredTransactions = useMemo(() => {

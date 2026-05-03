@@ -87,7 +87,7 @@ export async function register(credentials: RegisterCredentials): Promise<AuthRe
     console.error('[Auth] Registration profile setup failed:', error)
     // We don't delete the user account here to avoid losing the email reservation,
     // but the UI will know something went wrong if we re-throw or handle it.
-    throw new Error('Konto zostało utworzone, ale wystąpił problem z konfiguracją profilu. Spróbuj zalogować się ponownie.')
+    throw new Error('Konto zostało utworzone, ale wystąpił problem z konfiguracją profilu. Spróbuj zalogować się ponownie.', { cause: error })
   }
 
   return {

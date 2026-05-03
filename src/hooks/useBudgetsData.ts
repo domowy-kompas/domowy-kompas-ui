@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { fetchApi } from '../api/client'
+import { getBudgets } from '../api/firestore'
+import { useAuth } from '../context/AuthContext'
 
 export interface Budget {
   id: string
@@ -16,6 +17,7 @@ export interface BudgetsSummary {
 }
 
 export function useBudgetsData() {
+  const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [budgets, setBudgets] = useState<Budget[]>([])
@@ -23,17 +25,21 @@ export function useBudgetsData() {
 
   useEffect(() => {
     async function loadData() {
+      if (!user) return
+
       try {
         setIsLoading(true)
         setError(null)
 
-        const [budgetsData, summaryData] = await Promise.all([
-          fetchApi<Budget[]>('/budgets'),
-          fetchApi<BudgetsSummary>('/budget-status')
-        ])
-
+        const budgetsData = await getBudgets(user.uid)
         setBudgets(budgetsData)
-        setSummary(summaryData)
+        
+        // Calculate summary locally from Firestore data
+        const spentAmount = budgetsData.reduce((acc, b) => acc + b.spent, 0)
+        const totalLimit = budgetsData.reduce((acc, b) => acc + b.limit, 0)
+        const percentageUsed = totalLimit > 0 ? Math.round((spentAmount / totalLimit) * 100) : 0
+        
+        setSummary({ spentAmount, totalLimit, percentageUsed })
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Wystąpił błąd podczas pobierania danych budżetowych'
         setError(message)
@@ -43,7 +49,7 @@ export function useBudgetsData() {
     }
 
     loadData()
-  }, [])
+  }, [user])
 
   return { isLoading, error, budgets, summary }
 }

@@ -15,6 +15,8 @@ import {
   Loader2,
 } from 'lucide-react';
 import { useNotification } from '../../context/NotificationContext';
+import { useAuth } from '../../context/AuthContext';
+import { addTransaction } from '../../api/firestore';
 import './AddTransactionForm.css';
 
 type TransactionType = 'expense' | 'income';
@@ -29,6 +31,7 @@ export function AddTransactionForm(): ReactElement {
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [account, setAccount] = useState('mBank');
   const [note, setNote] = useState('');
+  const { user } = useAuth();
   const [isSaving, setIsSaving] = useState(false);
 
   const quickCategories = [
@@ -47,8 +50,22 @@ export function AddTransactionForm(): ReactElement {
     setIsSaving(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const amountValue = parseFloat(amount) * (type === 'expense' ? -1 : 1);
+      const now = new Date();
+      const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+
+      if (!user) throw new Error('User not authenticated');
+
+      await addTransaction(user.uid, {
+        date,
+        time,
+        title: note || (type === 'expense' ? 'Wydatek' : 'Dochód'),
+        category: category.charAt(0).toUpperCase() + category.slice(1),
+        categoryIcon: category, // Simplified mapping
+        method: account,
+        methodIcon: 'credit-card', // Simplified mapping
+        amount: amountValue
+      });
 
       showNotification(
         'Transakcja została zapisana pomyślnie!',
@@ -58,7 +75,8 @@ export function AddTransactionForm(): ReactElement {
       );
 
       navigate(-1);
-    } catch {
+    } catch (error) {
+      console.error('[AddTransaction] Failed to save:', error);
       showNotification('Błąd podczas zapisywania transakcji', 'error');
     } finally {
       setIsSaving(false);

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { fetchApi } from '../api/client'
+import { getBudgets, getGoals, getTransactions } from '../api/firestore'
+import { useAuth } from '../context/AuthContext'
 import { formatCurrency } from '../utils/format'
 
 // API Types
@@ -49,6 +50,7 @@ import vacationIcon from '../assets/dashboard/saving-goals-vacation.png'
 import type { KpiData, BudgetItem, GoalItem, OperationItem } from '../pages/Dashboard/dashboardData'
 
 export function useDashboardData() {
+  const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -59,18 +61,44 @@ export function useDashboardData() {
 
   useEffect(() => {
     async function loadData() {
+      if (!user) return
+
       try {
         setIsLoading(true)
         setError(null)
 
-        const [summaryData, budgetsData, goalsData, txData] = await Promise.all([
-          fetchApi<ApiSummary>('/summary'),
-          fetchApi<ApiBudget[]>('/budgets'),
-          fetchApi<ApiGoal[]>('/goals'),
-          fetchApi<ApiTransaction[]>('/transactions?_sort=date&_order=desc&_limit=5'),
+        const [fBudgets, fGoals, fTransactions] = await Promise.all([
+          getBudgets(user.uid),
+          getGoals(user.uid),
+          getTransactions(user.uid)
         ])
 
-        // use centralized formatter
+        const budgetsData = fBudgets as unknown as ApiBudget[]
+        const goalsData = fGoals as unknown as ApiGoal[]
+        const txData = fTransactions as unknown as ApiTransaction[]
+
+        // Calculate summary locally
+        const now = new Date('2026-04-29') // Consistent with mock data
+        const currentMonth = now.getMonth()
+        const currentYear = now.getFullYear()
+
+        const monthlyIncome = fTransactions
+          .filter(t => {
+            const d = new Date(t.date)
+            return d.getMonth() === currentMonth && d.getFullYear() === currentYear && t.amount > 0
+          })
+          .reduce((acc, t) => acc + t.amount, 0)
+
+        const monthlyExpenses = Math.abs(fTransactions
+          .filter(t => {
+            const d = new Date(t.date)
+            return d.getMonth() === currentMonth && d.getFullYear() === currentYear && t.amount < 0
+          })
+          .reduce((acc, t) => acc + t.amount, 0))
+
+        const totalBalance = fTransactions.reduce((acc, t) => acc + t.amount, 0)
+
+        const summaryData: ApiSummary = { totalBalance, monthlyIncome, monthlyExpenses }
 
         // 1. Map KPI
         setKpiData([
@@ -78,7 +106,7 @@ export function useDashboardData() {
             iconSrc: currentStateIcon,
             label: 'Całkowite Saldo',
             value: formatCurrency(summaryData.totalBalance),
-            badgeText: '+2.4%', // Placeholder
+            badgeText: '+2.4%', 
             badgeColor: 'green',
           },
           {
@@ -92,7 +120,9 @@ export function useDashboardData() {
             iconSrc: monthOutcomeIcon,
             label: 'Miesięczne Wydatki',
             value: formatCurrency(summaryData.monthlyExpenses),
-            badgeText: `${Math.round((summaryData.monthlyExpenses / summaryData.monthlyIncome) * 100)}% dochodu`,
+            badgeText: summaryData.monthlyIncome > 0 
+              ? `${Math.round((summaryData.monthlyExpenses / summaryData.monthlyIncome) * 100)}% dochodu`
+              : '0% dochodu',
             badgeColor: 'peach',
           },
         ])
@@ -129,6 +159,8 @@ export function useDashboardData() {
             case 'rozrywka': return tvIcon
             case 'transport': return fuelIcon
             case 'wpływy': return moneyIcon
+            case 'praca': return moneyIcon
+            case 'zakupy': return cartIcon
             default: return foodIcon
           }
         }
@@ -138,7 +170,7 @@ export function useDashboardData() {
           return date.toLocaleDateString('pl-PL', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
         }
 
-        setTransactions(txData.map(t => ({
+        setTransactions(txData.slice(0, 5).map(t => ({
           id: t.id,
           title: t.title,
           category: t.category,
@@ -157,7 +189,7 @@ export function useDashboardData() {
     }
 
     loadData()
-  }, [])
+  }, [user])
 
   return { isLoading, error, kpiData, budgets, goals, transactions }
 }

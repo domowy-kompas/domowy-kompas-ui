@@ -12,13 +12,13 @@ function renderWithProviders(ui: React.ReactElement) {
 }
 
 describe('Dashboard', () => {
-  it('renders greeting with user name', () => {
+  it('renders greeting with user name', async () => {
     renderWithProviders(<Dashboard />)
-    expect(screen.getByRole('heading', { name: /dzień dobry/i })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: /dzień dobry/i })).toBeInTheDocument()
   })
 
-  it('renders subtext', () => {
+  it('renders subtext', async () => {
     renderWithProviders(<Dashboard />)
-    expect(screen.getByText(/twoje finanse są pod kontrolą/i)).toBeInTheDocument()
+    expect(await screen.findByText(/twoje finanse są pod kontrolą/i)).toBeInTheDocument()
   })
 })
