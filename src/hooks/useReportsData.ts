@@ -29,6 +29,7 @@ export interface ReportCategory {
 }
 
 export interface ReportData {
+  id?: string
   summary: ReportSummary
   historicalData: HistoricalData[]
   categories: ReportCategory[]
