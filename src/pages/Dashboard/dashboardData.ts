@@ -20,16 +20,20 @@ export interface KpiData {
 }
 
 export interface BudgetItem {
-  category: string
-  percentage: number
-  colorClass: 'green' | 'brown' | 'blue'
+  name: string
+  iconSrc: string
+  spent: number
+  limit: number
+  percent: number
+  status: 'ok' | 'warning' | 'danger'
 }
 
 export interface GoalItem {
   name: string
-  percentage: number
   iconSrc: string
-  colorClass: 'green' | 'blue'
+  saved: number
+  target: number
+  percent: number
 }
 
 export interface OperationItem {
@@ -38,6 +42,7 @@ export interface OperationItem {
   category: string
   timeAgo: string
   amount: number
+  amountType: 'income' | 'outcome'
   iconSrc: string
   paymentMethod: string
 }

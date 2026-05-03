@@ -29,7 +29,7 @@ export function RecentOperations({ items }: RecentOperationsProps): ReactElement
               </div>
             </div>
             <div className="recent-operations-item-right">
-              <p className={`recent-operations-item-amount ${item.amount >= 0 ? 'amount-positive' : 'amount-negative'}`}>
+              <p className={`recent-operations-item-amount ${item.amountType === 'income' ? 'amount-income' : 'amount-outcome'}`}>
                 {item.amount >= 0 ? '+' : '-'} {Math.abs(item.amount).toLocaleString('pl-PL', { minimumFractionDigits: 2 })} zł
               </p>
               <p className="recent-operations-item-method">{item.paymentMethod}</p>

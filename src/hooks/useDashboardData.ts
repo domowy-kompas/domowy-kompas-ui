@@ -44,6 +44,7 @@ import tvIcon from '../assets/dashboard/transactions-netflix.png'
 import fuelIcon from '../assets/dashboard/transactions-orlen.png'
 import moneyIcon from '../assets/dashboard/transactions-pay.png'
 import foodIcon from '../assets/dashboard/transactions-pizza.png'
+import pigIcon from '../assets/dashboard/saving-goals-pig.png'
 import carIcon from '../assets/dashboard/saving-goals-car.png'
 import vacationIcon from '../assets/dashboard/saving-goals-vacation.png'
 
@@ -127,30 +128,63 @@ export function useDashboardData() {
           },
         ])
 
-        // 2. Map Budgets
-        setBudgets(budgetsData.map(b => {
-          const percentage = Math.round((b.spent / b.limit) * 100)
-          let colorClass: 'green' | 'brown' | 'blue' = 'green'
-          if (percentage > 85) colorClass = 'brown'
-          else if (percentage > 50) colorClass = 'blue'
-
-          return {
-            category: b.name,
-            percentage: Math.min(percentage, 100),
-            colorClass,
+        // 2. Map Budgets - sorted by percentage descending, limited to 3
+        const getBudgetIcon = (name: string) => {
+          // Map budget categories to asset icons
+          const iconMap: Record<string, string> = {
+            'dom': pigIcon,
+            'rozrywka': tvIcon,
+            'jedzenie': foodIcon,
+            'transport': fuelIcon,
+            'zakupy': cartIcon,
+            'podróże': vacationIcon,
           }
-        }))
+          return iconMap[name.toLowerCase()] || moneyIcon
+        }
 
-        // 3. Map Goals
-        setGoals(goalsData.map((g, idx) => {
-          const percentage = Math.round((g.current / g.target) * 100)
-          return {
-            name: g.name,
-            percentage: Math.min(percentage, 100),
-            iconSrc: idx % 2 === 0 ? carIcon : vacationIcon,
-            colorClass: idx % 2 === 0 ? 'green' : 'blue',
-          }
-        }))
+        setBudgets(
+          budgetsData
+            .map(b => {
+              const percent = Math.round((b.spent / b.limit) * 100)
+              let status: 'ok' | 'warning' | 'danger' = 'ok'
+              if (percent >= 100) status = 'danger'
+              else if (percent >= 80) status = 'warning'
+
+              return {
+                name: b.name,
+                iconSrc: getBudgetIcon(b.name),
+                spent: b.spent,
+                limit: b.limit,
+                percent,
+                status,
+              }
+            })
+            .sort((a, b) => b.percent - a.percent)
+            .slice(0, 3)
+        )
+
+        // 3. Map Goals - sorted by percentage descending, limited to 2
+        const getGoalIcon = (idx: number) => {
+          // Alternate between car and vacation icons for goal types
+          const icons = [carIcon, vacationIcon]
+          return icons[idx % icons.length]
+        }
+
+        setGoals(
+          goalsData
+            .map((g, idx) => {
+              const percent = Math.round((g.current / g.target) * 100)
+              return {
+                name: g.name,
+                iconSrc: getGoalIcon(idx),
+                saved: g.current,
+                target: g.target,
+                percent,
+              }
+            })
+            .sort((a, b) => b.percent - a.percent)
+            .slice(0, 2)
+        )
 
         // 4. Map Transactions
         const getIconForCategory = (cat: string) => {
@@ -176,6 +210,7 @@ export function useDashboardData() {
           category: t.category,
           timeAgo: formatDate(t.date),
           amount: t.amount,
+          amountType: t.amount >= 0 ? 'income' : 'outcome',
           iconSrc: getIconForCategory(t.category),
           paymentMethod: 'Karta/Przelew',
         })))
