@@ -40,15 +40,15 @@ const mapDocWithId = <T>(doc: QueryDocumentSnapshot<DocumentData>): T => ({
   id: doc.id,
 }) as T
 
-const convertTimestamps = <T extends Record<string, unknown>>(data: T): T => {
-  const result = { ...data } as Record<string, unknown>
+const convertTimestamps = <T extends object>(data: T): T => {
+  const result = { ...data } as unknown as Record<string, unknown>
   Object.keys(result).forEach((key) => {
     const value = result[key]
     if (value instanceof Timestamp) {
       result[key] = value.toDate().toISOString()
     }
   })
-  return result as T
+  return result as unknown as T
 }
 
 // --- User Profile ---
