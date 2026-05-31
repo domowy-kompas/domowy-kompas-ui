@@ -116,7 +116,12 @@ export function AddTransactionForm(): ReactElement {
               placeholder="0.00"
               step="0.01"
               min="0"
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val === '' || /^\d*\.?\d{0,2}$/.test(val)) {
+                  setAmount(val);
+                }
+              }}
               onBlur={() => {
                 if (amount && !isNaN(parseFloat(amount))) {
                   setAmount(parseFloat(amount).toFixed(2));
