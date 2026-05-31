@@ -95,6 +95,17 @@
   outline: none;
 }
 
+/* Hide native number input arrows */
+.amount-input::-webkit-outer-spin-button,
+.amount-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.amount-input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 /* Quick Categories */
 .quick-categories-section {
   display: flex;

@@ -26,7 +26,7 @@ export function AddTransactionForm(): ReactElement {
   const { showNotification } = useNotification();
 
   const [type, setType] = useState<TransactionType>('expense');
-  const [amount, setAmount] = useState('0.00');
+  const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('jedzenie');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [account, setAccount] = useState('mBank');
@@ -110,10 +110,18 @@ export function AddTransactionForm(): ReactElement {
           <div className="amount-input-wrapper">
             <span className="amount-currency">PLN</span>
             <input
-              type="text"
+              type="number"
               className="amount-input"
               value={amount}
+              placeholder="0.00"
+              step="0.01"
+              min="0"
               onChange={(e) => setAmount(e.target.value)}
+              onBlur={() => {
+                if (amount && !isNaN(parseFloat(amount))) {
+                  setAmount(parseFloat(amount).toFixed(2));
+                }
+              }}
               autoFocus
             />
           </div>
