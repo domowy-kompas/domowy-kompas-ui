@@ -1,4 +1,5 @@
 import { type ReactElement, useState } from 'react'
+import { Loader2 } from 'lucide-react'
 import { usePaymentMethods } from '../features/payments/hooks/usePaymentMethods'
 import type { PaymentMethod } from '../features/payments/types'
 import './Settings.css'
@@ -37,14 +38,19 @@ export function Settings(): ReactElement {
   const { methods, addMethod, removeMethod } = usePaymentMethods()
   const [newName, setNewName] = useState('')
   const [newType, setNewType] = useState<PaymentMethod['type']>('card')
+  const [isSaving, setIsSaving] = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null)
 
   const tabs = ['Profil', 'Płatności']
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     const name = newName.trim()
     if (!name) return
+    setIsSaving(true)
+    await new Promise(r => setTimeout(r, 1000))
     addMethod(name, newType)
     setNewName('')
+    setIsSaving(false)
   }
 
   return (
@@ -165,7 +171,7 @@ export function Settings(): ReactElement {
                   <span className="payment-method-name">{method.name}</span>
                   <button
                     className="payment-method-remove"
-                    onClick={() => removeMethod(method.id)}
+                    onClick={() => setDeleteTarget(method.id)}
                     aria-label={`Usuń ${method.name}`}
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -197,12 +203,34 @@ export function Settings(): ReactElement {
                   <option value="cash">Gotówka</option>
                   <option value="transfer">Przelew</option>
                 </select>
-                <button className="btn-primary" onClick={handleAdd}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="12" y1="5" x2="12" y2="19" />
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                  </svg>
+                <button className="btn-primary" onClick={handleAdd} disabled={isSaving}>
+                  {isSaving ? (
+                    <Loader2 size={16} className="spinner" />
+                  ) : (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19" />
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                  )}
                   Dodaj
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {deleteTarget && (
+          <div className="modal-overlay" onClick={() => setDeleteTarget(null)}>
+            <div className="modal-box" onClick={e => e.stopPropagation()}>
+              <h3 className="modal-title">Usunąć metodę płatności?</h3>
+              <p className="modal-text">
+                Czy na pewno chcesz usunąć <strong>{methods.find(m => m.id === deleteTarget)?.name}</strong>?
+                Tej operacji nie można cofnąć.
+              </p>
+              <div className="modal-actions">
+                <button className="btn-secondary" onClick={() => setDeleteTarget(null)}>Anuluj</button>
+                <button className="btn-danger modal-confirm" onClick={() => { removeMethod(deleteTarget); setDeleteTarget(null) }}>
+                  Usuń
                 </button>
               </div>
             </div>
