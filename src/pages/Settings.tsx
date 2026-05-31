@@ -1,10 +1,51 @@
 import { type ReactElement, useState } from 'react'
+import { usePaymentMethods } from '../features/payments/hooks/usePaymentMethods'
+import type { PaymentMethod } from '../features/payments/types'
 import './Settings.css'
+
+function PaymentMethodIcon({ type }: { type: PaymentMethod['type'] }) {
+  if (type === 'card') {
+    return (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+        <line x1="1" y1="10" x2="23" y2="10" />
+      </svg>
+    )
+  }
+  if (type === 'cash') {
+    return (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="6" width="20" height="12" rx="2" />
+        <circle cx="12" cy="12" r="3" />
+      </svg>
+    )
+  }
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5" />
+      <line x1="13" y1="19" x2="19" y2="13" />
+      <line x1="16" y1="16" x2="20" y2="20" />
+      <line x1="19" y1="21" x2="21" y2="19" />
+      <polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5" />
+      <line x1="5" y1="14" x2="9" y2="18" />
+    </svg>
+  )
+}
 
 export function Settings(): ReactElement {
   const [activeTab, setActiveTab] = useState('Profil')
+  const { methods, addMethod, removeMethod } = usePaymentMethods()
+  const [newName, setNewName] = useState('')
+  const [newType, setNewType] = useState<PaymentMethod['type']>('card')
 
-  const tabs = ['Profil', 'Powiadomienia', 'Bezpieczeństwo', 'Preferencje']
+  const tabs = ['Profil', 'Płatności']
+
+  const handleAdd = () => {
+    const name = newName.trim()
+    if (!name) return
+    addMethod(name, newType)
+    setNewName('')
+  }
 
   return (
     <div className="settings-container">
@@ -111,10 +152,60 @@ export function Settings(): ReactElement {
           </>
         )}
 
-        {activeTab !== 'Profil' && (
+        {activeTab === 'Płatności' && (
           <div className="settings-card">
-            <h2 className="section-title">{activeTab}</h2>
-            <p style={{ color: '#3e4947', marginTop: '16px' }}>Ta sekcja jest w trakcie przygotowania.</p>
+            <h2 className="section-title">Metody płatności</h2>
+
+            <div className="payment-method-list">
+              {methods.map(method => (
+                <div key={method.id} className="payment-method-row">
+                  <div className="payment-method-icon">
+                    <PaymentMethodIcon type={method.type} />
+                  </div>
+                  <span className="payment-method-name">{method.name}</span>
+                  <button
+                    className="payment-method-remove"
+                    onClick={() => removeMethod(method.id)}
+                    aria-label={`Usuń ${method.name}`}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18" />
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <div className="payment-method-add">
+              <h3 className="section-subtitle">Dodaj metodę płatności</h3>
+              <div className="payment-method-form">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Nazwa metody"
+                  value={newName}
+                  onChange={e => setNewName(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter') handleAdd() }}
+                />
+                <select
+                  className="form-control"
+                  value={newType}
+                  onChange={e => setNewType(e.target.value as PaymentMethod['type'])}
+                >
+                  <option value="card">Karta</option>
+                  <option value="cash">Gotówka</option>
+                  <option value="transfer">Przelew</option>
+                </select>
+                <button className="btn-primary" onClick={handleAdd}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                  Dodaj
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>
