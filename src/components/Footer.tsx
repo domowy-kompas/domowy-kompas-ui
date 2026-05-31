@@ -10,12 +10,6 @@ export function Footer(): ReactElement {
         <p className="footer-app-name">Domowy Kompas</p>
         <p className="footer-copyright">&copy; {currentYear} Domowy Kompas. Wspieramy Twoją finansową przyszłość.</p>
       </div>
-      <nav className="footer-links">
-        <a href="#" className="footer-link">Polityka Prywatności</a>
-        <a href="#" className="footer-link">Warunki Serwisu</a>
-        <a href="#" className="footer-link">Kontakt z Pomocą</a>
-        <a href="#" className="footer-link">FAQ</a>
-      </nav>
     </footer>
   )
 }

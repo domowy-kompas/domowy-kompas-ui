@@ -31,24 +31,6 @@
   color: #6c757d;
 }
 
-.footer-links {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-}
-
-.footer-link {
-  font-size: 13px;
-  color: #6c757d;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  transition: color 0.2s;
-}
-
-.footer-link:hover {
-  color: #212529;
-}
-
 @media (max-width: 768px) {
   .footer {
     flex-direction: column;
@@ -56,10 +38,5 @@
     padding: 24px 16px;
     gap: 16px;
     align-items: flex-start;
-  }
-
-  .footer-links {
-    flex-wrap: wrap;
-    gap: 12px;
   }
 }
