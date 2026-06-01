@@ -1,6 +1,6 @@
 import { type ReactElement, useState, useEffect } from 'react'
 import { Search, Rocket, Landmark, Shield, ChevronDown, ChevronUp, ArrowRight, Send } from 'lucide-react'
-import { trackPageView } from '../utils/analytics'
+import { trackEvent, trackPageView } from '../utils/analytics'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import mailIcon from '../assets/help/mail.png'
@@ -16,7 +16,7 @@ interface HelpTopicCardProps {
 
 function HelpTopicCard({ title, description, icon, variant }: HelpTopicCardProps): ReactElement {
   return (
-    <div className="help-card">
+    <div className="help-card" onClick={() => trackEvent('help_topic_viewed', { topic_name: title })}>
       <div className={`help-card-icon-wrapper ${variant}`}>
         {icon}
       </div>
@@ -87,7 +87,13 @@ function FAQSection(): ReactElement {
               >
                 <button 
                   className="faq-question-btn"
-                  onClick={() => setExpandedIndex(isExpanded ? null : index)}
+                  onClick={() => {
+                    const next = isExpanded ? null : index
+                    setExpandedIndex(next)
+                    if (next !== null) {
+                      trackEvent('faq_expanded', { faq_index: index })
+                    }
+                  }}
                 >
                   <span>{faq.question}</span>
                   {isExpanded ? <ChevronUp size={20} className="faq-icon" /> : <ChevronDown size={20} className="faq-icon-inactive" />}

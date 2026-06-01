@@ -41,18 +41,18 @@ Both are error-safe — they silently return if Analytics is unavailable or bloc
 | `password_reset_requested` | `LoginCard` | ✅ |
 | `transaction_created` | `AddTransactionForm` | ✅ |
 | `transaction_filtered` | `TransactionsHeader` | ✅ |
-| `budget_status_exceeded` | `Budgets` | ❌ |
-| `goal_progress_tracked` | `Goals` / `GoalsCard` | ❌ |
-| `report_period_changed` | `Reports` | ❌ |
-| `report_date_navigated` | `Reports` | ❌ |
-| `payment_method_added` | `Settings` | ❌ |
-| `payment_method_removed` | `Settings` | ❌ |
-| `settings_tab_switched` | `Settings` | ❌ |
-| `faq_expanded` | `Help` | ❌ |
-| `help_topic_viewed` | `Help` | ❌ |
-| `auth_error` | `LoginCard` / `Register` | ❌ |
-| `transaction_save_failed` | `AddTransactionForm` | ❌ |
-| `data_load_error` | Dashboard, Budgets, Goals, Reports | ❌ |
+| `budget_status_exceeded` | `Budgets` | ✅ |
+| `goal_progress_tracked` | `Goals` | ✅ |
+| `report_period_changed` | `Reports` | ✅ |
+| `report_date_navigated` | `Reports` | ✅ |
+| `payment_method_added` | `Settings` | ✅ |
+| `payment_method_removed` | `Settings` | ✅ |
+| `settings_tab_switched` | `Settings` | ✅ |
+| `faq_expanded` | `Help` | ✅ |
+| `help_topic_viewed` | `Help` | ✅ |
+| `auth_error` | `LoginCard` / `Register` | ✅ |
+| `transaction_save_failed` | `AddTransactionForm` | ✅ |
+| `data_load_error` | Dashboard, Budgets, Goals, Reports | ✅ |
 
 ## Using an Event
 

@@ -1,6 +1,6 @@
 import { useEffect, type ReactElement } from 'react'
 import { Greeting } from './Greeting'
-import { trackPageView } from '../../utils/analytics'
+import { trackEvent, trackPageView } from '../../utils/analytics'
 import { KpiCards } from './KpiCards'
 import { BudgetsCard } from './BudgetsCard'
 import { GoalsCard } from './GoalsCard'
@@ -15,6 +15,7 @@ export function Dashboard(): ReactElement {
   const { isLoading, error, kpiData, budgets, goals, transactions } = useDashboardData()
 
   if (error) {
+    trackEvent('data_load_error', { page_name: 'dashboard' })
     return (
       <div className="dashboard">
         <Greeting />

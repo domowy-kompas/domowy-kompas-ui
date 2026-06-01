@@ -80,6 +80,7 @@ export function AddTransactionForm(): ReactElement {
       navigate(-1);
     } catch (error) {
       console.error('[AddTransaction] Failed to save:', error);
+      trackEvent('transaction_save_failed')
       showNotification('Błąd podczas zapisywania transakcji', 'error');
     } finally {
       setIsSaving(false);

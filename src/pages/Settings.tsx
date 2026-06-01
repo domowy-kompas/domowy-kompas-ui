@@ -1,5 +1,5 @@
 import { useEffect, type ReactElement, useState } from 'react'
-import { trackPageView } from '../utils/analytics'
+import { trackEvent, trackPageView } from '../utils/analytics'
 import { Loader2 } from 'lucide-react'
 import { usePaymentMethods } from '../features/payments/hooks/usePaymentMethods'
 import type { PaymentMethod } from '../features/payments/types'
@@ -52,6 +52,7 @@ export function Settings(): ReactElement {
     setIsSaving(true)
     await new Promise(r => setTimeout(r, 1000))
     addMethod(name, newType)
+    trackEvent('payment_method_added')
     setNewName('')
     setIsSaving(false)
   }
@@ -69,7 +70,10 @@ export function Settings(): ReactElement {
             <button 
               key={tab}
               className={`settings-tab ${activeTab === tab ? 'active' : ''}`}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => {
+                setActiveTab(tab)
+                trackEvent('settings_tab_switched', { tab_name: tab })
+              }}
             >
               {tab}
             </button>
@@ -232,7 +236,7 @@ export function Settings(): ReactElement {
               </p>
               <div className="modal-actions">
                 <button className="btn-secondary" onClick={() => setDeleteTarget(null)}>Anuluj</button>
-                <button className="btn-danger modal-confirm" onClick={() => { removeMethod(deleteTarget); setDeleteTarget(null) }}>
+                <button className="btn-danger modal-confirm" onClick={() => { removeMethod(deleteTarget); trackEvent('payment_method_removed'); setDeleteTarget(null) }}>
                   Usuń
                 </button>
               </div>

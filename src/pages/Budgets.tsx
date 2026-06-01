@@ -1,6 +1,6 @@
-import { useEffect, type ReactElement } from 'react'
+import { useEffect, useRef, type ReactElement } from 'react'
 import { Link } from 'react-router-dom'
-import { trackPageView } from '../utils/analytics'
+import { trackEvent, trackPageView } from '../utils/analytics'
 import { useBudgetsData } from '../hooks/useBudgetsData'
 import { BudgetsSummarySkeleton, BudgetsGridSkeleton } from './BudgetsSkeletons'
 import './Budgets.css'
@@ -31,6 +31,14 @@ export function Budgets(): ReactElement {
   const { isLoading, error, budgets, summary } = useBudgetsData()
 
   const hasExceeded = budgets.some(b => b.spent > b.limit)
+  const prevExceeded = useRef(hasExceeded)
+
+  useEffect(() => {
+    if (hasExceeded && !prevExceeded.current) {
+      trackEvent('budget_status_exceeded')
+    }
+    prevExceeded.current = hasExceeded
+  }, [hasExceeded])
 
   // use centralized formatter from utils
 
@@ -41,6 +49,7 @@ export function Budgets(): ReactElement {
   }
 
   if (error) {
+    trackEvent('data_load_error', { page_name: 'budgets' })
     return (
       <div className="budgets-container">
         <header className="budgets-header">

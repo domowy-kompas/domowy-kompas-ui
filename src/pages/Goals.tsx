@@ -1,6 +1,6 @@
 import { useEffect, type ReactElement } from 'react'
 import { useGoalsData } from '../hooks/useGoalsData'
-import { trackPageView } from '../utils/analytics'
+import { trackEvent, trackPageView } from '../utils/analytics'
 import { GoalsSummarySkeleton, GoalsGridSkeleton } from './GoalsSkeletons'
 import './Goals.css'
 import { formatCurrency } from '../utils/format'
@@ -40,9 +40,17 @@ export function Goals(): ReactElement {
 
   const { goals, summary, isLoading, error } = useGoalsData()
 
+  useEffect(() => {
+    if (!isLoading && goals.length > 0) {
+      const avgProgress = Math.round(goals.reduce((sum, g) => sum + g.percentage, 0) / goals.length)
+      trackEvent('goal_progress_tracked', { progress_percent: avgProgress, goal_count: goals.length })
+    }
+  }, [isLoading, goals])
+
   // use centralized formatter
 
   if (error) {
+    trackEvent('data_load_error', { page_name: 'goals' })
     return <div className="goals-page">Błąd: {error}</div>
   }
 
