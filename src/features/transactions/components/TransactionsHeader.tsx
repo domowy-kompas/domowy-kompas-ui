@@ -1,4 +1,5 @@
-import type { ReactElement } from 'react'
+import { useCallback, type ReactElement } from 'react'
+import { trackEvent } from '../../../utils/analytics'
 interface TransactionsHeaderProps {
   filters: {
     search: string
@@ -10,6 +11,14 @@ interface TransactionsHeaderProps {
 }
 
 export function TransactionsHeader({ filters, updateFilters }: TransactionsHeaderProps): ReactElement {
+  const fireFilterEvent = useCallback(() => {
+    trackEvent('transaction_filtered', {
+      category: filters.category,
+      period: filters.period,
+      search: filters.search.length > 0,
+      type: filters.type,
+    })
+  }, [filters])
 
   return (
     <div className="transactions-header">
@@ -40,7 +49,10 @@ export function TransactionsHeader({ filters, updateFilters }: TransactionsHeade
           </svg>
           <select 
             value={filters.period}
-            onChange={(e) => updateFilters({ period: e.target.value })}
+            onChange={(e) => {
+              updateFilters({ period: e.target.value })
+              fireFilterEvent()
+            }}
           >
             <option>Wszystkie</option>
             <option>Ten miesiąc</option>
@@ -61,7 +73,10 @@ export function TransactionsHeader({ filters, updateFilters }: TransactionsHeade
           </svg>
           <select 
             value={filters.category}
-            onChange={(e) => updateFilters({ category: e.target.value })}
+            onChange={(e) => {
+              updateFilters({ category: e.target.value })
+              fireFilterEvent()
+            }}
           >
             <option>Wszystkie</option>
             <option>Zakupy</option>
@@ -76,7 +91,10 @@ export function TransactionsHeader({ filters, updateFilters }: TransactionsHeade
         <label>Filtry</label>
         <div style={{ display: 'flex', background: '#f0f0f0', borderRadius: '8px', padding: '4px' }}>
           <button 
-            onClick={() => updateFilters({ type: 'Wszystkie' })}
+            onClick={() => {
+              updateFilters({ type: 'Wszystkie' })
+              fireFilterEvent()
+            }}
             style={{ 
               flex: 1, 
               border: 'none', 
@@ -93,7 +111,10 @@ export function TransactionsHeader({ filters, updateFilters }: TransactionsHeade
             Wszystkie
           </button>
           <button 
-            onClick={() => updateFilters({ type: 'Wydatki' })}
+            onClick={() => {
+              updateFilters({ type: 'Wydatki' })
+              fireFilterEvent()
+            }}
             style={{ 
               flex: 1, 
               border: 'none', 

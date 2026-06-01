@@ -39,8 +39,8 @@ Both are error-safe — they silently return if Analytics is unavailable or bloc
 | `user_registration_started` | `Register` | ✅ |
 | `user_registration_completed` | `AuthContext` | ✅ |
 | `password_reset_requested` | `LoginCard` | ✅ |
-| `transaction_created` | `AddTransactionForm` | ❌ |
-| `transaction_filtered` | `TransactionsHeader` | ❌ |
+| `transaction_created` | `AddTransactionForm` | ✅ |
+| `transaction_filtered` | `TransactionsHeader` | ✅ |
 | `budget_status_exceeded` | `Budgets` | ❌ |
 | `goal_progress_tracked` | `Goals` / `GoalsCard` | ❌ |
 | `report_period_changed` | `Reports` | ❌ |

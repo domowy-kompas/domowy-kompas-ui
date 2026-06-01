@@ -17,6 +17,7 @@ import {
 import { useNotification } from '../../context/NotificationContext';
 import { useAuth } from '../../context/AuthContext';
 import { addTransaction } from '../../api/firestore';
+import { trackEvent } from '../../utils/analytics';
 import './AddTransactionForm.css';
 
 type TransactionType = 'expense' | 'income';
@@ -66,6 +67,8 @@ export function AddTransactionForm(): ReactElement {
         methodIcon: 'credit-card', // Simplified mapping
         amount: amountValue
       });
+
+      trackEvent('transaction_created', { category })
 
       showNotification(
         'Transakcja została zapisana pomyślnie!',
