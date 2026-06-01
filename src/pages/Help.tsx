@@ -1,5 +1,6 @@
 import { type ReactElement, useState, useEffect } from 'react'
 import { Search, Rocket, Landmark, Shield, ChevronDown, ChevronUp, ArrowRight, Send } from 'lucide-react'
+import { trackPageView } from '../utils/analytics'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import mailIcon from '../assets/help/mail.png'
@@ -154,6 +155,8 @@ function ContactSection(): ReactElement {
 }
 
 export function Help(): ReactElement {
+  useEffect(() => { trackPageView('help') }, [])
+
   const [searchQuery, setSearchQuery] = useState('')
 
   const helpTopics: HelpTopicCardProps[] = [

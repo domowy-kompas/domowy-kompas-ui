@@ -1,4 +1,5 @@
-import { useState, type ReactElement } from 'react'
+import { useEffect, useState, type ReactElement } from 'react'
+import { trackPageView } from '../utils/analytics'
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
   PieChart, Pie, Cell 
@@ -24,6 +25,8 @@ const ICON_MAP: Record<string, string> = {
 }
 
 export function Reports(): ReactElement {
+  useEffect(() => { trackPageView('reports') }, [])
+
   const [period, setPeriod] = useState('Miesiąc')
   const { data, historicalData, isLoading, error } = useReportsData(period)
 

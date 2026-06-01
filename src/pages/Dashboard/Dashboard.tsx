@@ -1,5 +1,6 @@
-import type { ReactElement } from 'react'
+import { useEffect, type ReactElement } from 'react'
 import { Greeting } from './Greeting'
+import { trackPageView } from '../../utils/analytics'
 import { KpiCards } from './KpiCards'
 import { BudgetsCard } from './BudgetsCard'
 import { GoalsCard } from './GoalsCard'
@@ -9,6 +10,8 @@ import { KpiCardsSkeleton, BudgetsCardSkeleton, GoalsCardSkeleton, RecentOperati
 import './Dashboard.css'
 
 export function Dashboard(): ReactElement {
+  useEffect(() => { trackPageView('dashboard') }, [])
+
   const { isLoading, error, kpiData, budgets, goals, transactions } = useDashboardData()
 
   if (error) {

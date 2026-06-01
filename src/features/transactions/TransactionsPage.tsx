@@ -1,5 +1,6 @@
-import type { ReactElement } from 'react'
+import { useEffect, type ReactElement } from 'react'
 import { useTransactions } from './hooks/useTransactions'
+import { trackPageView } from '../../utils/analytics'
 import { TransactionsHeader } from './components/TransactionsHeader'
 import { TransactionsList } from './components/TransactionsList'
 import { SummaryWidget } from './components/SummaryWidget'
@@ -12,6 +13,8 @@ import {
 import './transactions.css'
 
 export function TransactionsPage(): ReactElement {
+  useEffect(() => { trackPageView('transactions') }, [])
+
   const { 
     transactions, 
     summary, 

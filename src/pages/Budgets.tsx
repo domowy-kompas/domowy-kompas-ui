@@ -1,5 +1,6 @@
-import type { ReactElement } from 'react'
+import { useEffect, type ReactElement } from 'react'
 import { Link } from 'react-router-dom'
+import { trackPageView } from '../utils/analytics'
 import { useBudgetsData } from '../hooks/useBudgetsData'
 import { BudgetsSummarySkeleton, BudgetsGridSkeleton } from './BudgetsSkeletons'
 import './Budgets.css'
@@ -25,6 +26,8 @@ const CATEGORY_ICONS: Record<string, string> = {
 }
 
 export function Budgets(): ReactElement {
+  useEffect(() => { trackPageView('budgets') }, [])
+
   const { isLoading, error, budgets, summary } = useBudgetsData()
 
   const hasExceeded = budgets.some(b => b.spent > b.limit)

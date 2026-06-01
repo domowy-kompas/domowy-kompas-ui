@@ -1,5 +1,6 @@
-import type { ReactElement } from 'react'
+import { useEffect, type ReactElement } from 'react'
 import { Link } from 'react-router-dom'
+import { trackPageView } from '../utils/analytics'
 import './LandingPage.css'
 
 // Assets
@@ -18,6 +19,8 @@ import avatar3 from '../assets/landing-page/avatar3.png'
 import vectorImg from '../assets/landing-page/Vector.png'
 
 export function LandingPage(): ReactElement {
+  useEffect(() => { trackPageView('landing') }, [])
+
   return (
     <div className="landing-page">
       <header className="landing-header">

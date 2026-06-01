@@ -1,4 +1,5 @@
-import { type ReactElement, useState } from 'react'
+import { useEffect, type ReactElement, useState } from 'react'
+import { trackPageView } from '../utils/analytics'
 import { Loader2 } from 'lucide-react'
 import { usePaymentMethods } from '../features/payments/hooks/usePaymentMethods'
 import type { PaymentMethod } from '../features/payments/types'
@@ -34,6 +35,8 @@ function PaymentMethodIcon({ type }: { type: PaymentMethod['type'] }) {
 }
 
 export function Settings(): ReactElement {
+  useEffect(() => { trackPageView('settings') }, [])
+
   const [activeTab, setActiveTab] = useState('Profil')
   const { methods, addMethod, removeMethod } = usePaymentMethods()
   const [newName, setNewName] = useState('')

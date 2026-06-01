@@ -1,5 +1,6 @@
-import type { ReactElement } from 'react'
+import { useEffect, type ReactElement } from 'react'
 import { useGoalsData } from '../hooks/useGoalsData'
+import { trackPageView } from '../utils/analytics'
 import { GoalsSummarySkeleton, GoalsGridSkeleton } from './GoalsSkeletons'
 import './Goals.css'
 import { formatCurrency } from '../utils/format'
@@ -35,6 +36,8 @@ const GOAL_ICONS: Record<string, string> = {
 }
 
 export function Goals(): ReactElement {
+  useEffect(() => { trackPageView('goals') }, [])
+
   const { goals, summary, isLoading, error } = useGoalsData()
 
   // use centralized formatter
