@@ -41,5 +41,17 @@ Aplikacja dąży do estetyki **premium desktop app**:
 - **Filtrowanie/Pagowanie**: Preferujemy filtrowanie po stronie klienta dla mniejszych zestawów danych (np. transakcje), aby zapewnić natychmiastową reakcję UI.
 - **Derived State**: Obliczamy sumy i statystyki w `useMemo` na podstawie pobranych surowych danych.
 
+## 📊 Analityka
+
+Korzystamy z Firebase Analytics. Kod pomocniczy znajduje się w `src/utils/analytics.ts`.
+
+- **`trackEvent(name, params?)`** — wysyła dowolne zdarzenie (bezpiecznie, nigdy nie rzuca błędem)
+- **`trackPageView(pageName)`** — skrót do `trackEvent('page_view_{pageName}')`
+
+Wszystkie zdarzenia opisane są w [`docs/analytics.md`](docs/analytics.md).
+
+> **Zasady**: Nie wysyłamy danych osobowych (PII). Zdarzenia pagowe odpalają się raz przy montowaniu komponentu. Gdy `MEASUREMENT_ID` brakuje, aplikacja działa normalnie bez analityki.
+
 ---
+
 *Dokumentacja zaktualizowana: 2026-04-29*
