@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import compassIcon from '../assets/login/compass.png'
 import { getFirebaseAuthErrorMessage } from '../utils/firebaseErrors'
+import { trackEvent } from '../utils/analytics'
 import '../components/LoginCard.css'
 import { useNotification } from '../context/NotificationContext'
 
@@ -30,10 +31,13 @@ export function Register(): ReactElement {
       return
     }
 
+    trackEvent('user_registration_started')
+
     try {
       await register({ email, password, name, surname })
       navigate('/dashboard', { replace: true })
     } catch (authError) {
+      trackEvent('auth_error', { error_code: (authError as { code?: string }).code })
       showNotification(getFirebaseAuthErrorMessage(authError), 'error')
     }
   }

@@ -30,15 +30,15 @@ Both are error-safe — they silently return if Analytics is unavailable or bloc
 | `Settings` | `page_view_settings` | ✅ |
 | `Help` | `page_view_help` | ✅ |
 
-## Interaction Events (planned)
+## Interaction Events
 
 | Event | Location | Status |
 |-------|----------|--------|
-| `user_login` | `LoginCard` | ❌ |
-| `user_logout` | `AuthContext` | ❌ |
-| `user_registration_started` | `Register` | ❌ |
-| `user_registration_completed` | `AuthContext` | ❌ |
-| `password_reset_requested` | `LoginCard` | ❌ |
+| `user_login` | `LoginCard` | ✅ |
+| `user_logout` | `AuthContext` | ✅ |
+| `user_registration_started` | `Register` | ✅ |
+| `user_registration_completed` | `AuthContext` | ✅ |
+| `password_reset_requested` | `LoginCard` | ✅ |
 | `transaction_created` | `AddTransactionForm` | ❌ |
 | `transaction_filtered` | `TransactionsHeader` | ❌ |
 | `budget_status_exceeded` | `Budgets` | ❌ |

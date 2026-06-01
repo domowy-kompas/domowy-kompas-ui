@@ -4,6 +4,7 @@ import { createContext, useContext, useState, useCallback, useMemo, useEffect } 
 import type { AuthUser, LoginCredentials, RegisterCredentials } from '../types/auth'
 import { login as apiLogin, register as apiRegister, logout as apiLogout, observeAuthState, mapFirebaseUser } from '../api/auth'
 import { auth } from '../config/firebase'
+import { trackEvent } from '../utils/analytics'
 
 interface AuthContextValue {
   user: AuthUser | null
@@ -53,6 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }): ReactElemen
     try {
       const data = await apiRegister(credentials)
       setUser(data.user)
+      trackEvent('user_registration_completed')
       setIsLoading(false)
     } finally {
       setIsSubmitting(false)
@@ -62,6 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }): ReactElemen
   const logout = useCallback(() => {
     void apiLogout()
     setUser(null)
+    trackEvent('user_logout')
   }, [])
 
   const value = useMemo<AuthContextValue>(

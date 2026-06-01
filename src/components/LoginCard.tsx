@@ -6,6 +6,7 @@ import { useNotification } from '../context/NotificationContext'
 import compassIcon from '../assets/login/compass.png'
 import { sendPasswordReset } from '../api/auth'
 import { getFirebaseAuthErrorMessage } from '../utils/firebaseErrors'
+import { trackEvent } from '../utils/analytics'
 import './LoginCard.css'
 
 export function LoginCard(): ReactElement {
@@ -29,8 +30,10 @@ export function LoginCard(): ReactElement {
     e.preventDefault()
     try {
       await login({ email, password }, rememberMe)
+      trackEvent('user_login')
       navigate(from, { replace: true })
     } catch (authError) {
+      trackEvent('auth_error', { error_code: (authError as { code?: string }).code })
       const message = getFirebaseAuthErrorMessage(authError)
       showNotification(message, 'error')
     }
@@ -44,8 +47,10 @@ export function LoginCard(): ReactElement {
 
     try {
       await sendPasswordReset(email)
+      trackEvent('password_reset_requested')
       showNotification('Wysłaliśmy link do resetu hasła na podany adres email.', 'success')
     } catch (authError) {
+      trackEvent('auth_error', { error_code: (authError as { code?: string }).code })
       showNotification(getFirebaseAuthErrorMessage(authError), 'error')
     }
   }
