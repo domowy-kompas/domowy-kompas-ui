@@ -1,9 +1,12 @@
-import { useEffect, type ReactElement } from 'react'
+import { useEffect, useState, type ReactElement } from 'react'
 import { useGoalsData } from '../hooks/useGoalsData'
 import { trackEvent, trackPageView } from '../utils/analytics'
 import { GoalsSummarySkeleton, GoalsGridSkeleton } from './GoalsSkeletons'
 import './Goals.css'
 import { formatCurrency } from '../utils/format'
+import { Loader2, X } from 'lucide-react'
+import { useAuth } from '../context/AuthContext'
+import { addGoal } from '../api/firestore'
 
 // Assets
 import savingSumIcon from '../assets/goals/saving-sum.png'
@@ -38,7 +41,55 @@ const GOAL_ICONS: Record<string, string> = {
 export function Goals(): ReactElement {
   useEffect(() => { trackPageView('goals') }, [])
 
-  const { goals, summary, isLoading, error } = useGoalsData()
+  const { user } = useAuth()
+  const [showModal, setShowModal] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const [name, setName] = useState('')
+  const [current, setCurrent] = useState('')
+  const [target, setTarget] = useState('')
+  const [deadline, setDeadline] = useState('')
+  const [monthlyContribution, setMonthlyContribution] = useState('')
+
+  const resetForm = () => {
+    setName('')
+    setCurrent('')
+    setTarget('')
+    setDeadline('')
+    setMonthlyContribution('')
+  }
+
+  const handleSave = async () => {
+    if (!user || !name || !target) return
+    setIsSaving(true)
+    try {
+      const currentNum = parseFloat(current) || 0
+      const targetNum = parseFloat(target)
+      const contributionNum = parseFloat(monthlyContribution) || 0
+      const percentage = targetNum > 0 ? Math.round((currentNum / targetNum) * 100) : 0
+
+      await addGoal(user.uid, {
+        name,
+        current: currentNum,
+        target: targetNum,
+        deadline,
+        monthlyContribution: contributionNum,
+        percentage,
+        image: 'cushion.png',
+        category: 'Inne',
+      })
+
+      trackEvent('goal_created', { name })
+      setShowModal(false)
+      resetForm()
+      refreshGoals()
+    } catch {
+      trackEvent('data_load_error', { page_name: 'goals' })
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const { goals, summary, isLoading, error, refreshGoals } = useGoalsData()
 
   useEffect(() => {
     if (!isLoading && goals.length > 0) {
@@ -138,12 +189,70 @@ export function Goals(): ReactElement {
             </div>
           ))}
 
-          <div className="add-goal-card">
+          <div className="add-goal-card" onClick={() => { resetForm(); setShowModal(true) }}>
             <div className="plus-circle">
               <img src={plusIcon} aria-hidden="true" />
             </div>
             <h3>Dodaj nowy cel</h3>
             <p>Masz nowe marzenie? Zacznij na nie oszczędzać już dziś.</p>
+          </div>
+        </div>
+      )}
+
+      {showModal && (
+        <div className="goal-modal-overlay" onClick={() => { if (!isSaving) { resetForm(); setShowModal(false) } }}>
+          <div className="goal-modal-box" onClick={e => e.stopPropagation()}>
+            <div className="goal-modal-header">
+              <h3>Dodaj nowy cel</h3>
+              <button className="goal-modal-close" onClick={() => { resetForm(); setShowModal(false) }} disabled={isSaving}>
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="goal-modal-body">
+              <div className="goal-form-group">
+                <label className="goal-form-label">Nazwa celu</label>
+                <input className="goal-form-input" type="text" placeholder="Np. Wakacje w Grecji" value={name} onChange={e => setName(e.target.value)} />
+              </div>
+
+              <div className="goal-form-row">
+                <div className="goal-form-group">
+                  <label className="goal-form-label">Zebrano (PLN)</label>
+                  <input className="goal-form-input" type="number" placeholder="0" min="0" value={current} onChange={e => setCurrent(e.target.value)} />
+                </div>
+                <div className="goal-form-group">
+                  <label className="goal-form-label">Cel (PLN)</label>
+                  <input className="goal-form-input" type="number" placeholder="0" min="0" value={target} onChange={e => setTarget(e.target.value)} />
+                </div>
+              </div>
+
+              <div className="goal-form-row">
+                <div className="goal-form-group">
+                  <label className="goal-form-label">Termin</label>
+                  <input className="goal-form-input" type="date" value={deadline} onChange={e => setDeadline(e.target.value)} />
+                </div>
+                <div className="goal-form-group">
+                  <label className="goal-form-label">Miesięczna składka (PLN)</label>
+                  <input className="goal-form-input" type="number" placeholder="0" min="0" value={monthlyContribution} onChange={e => setMonthlyContribution(e.target.value)} />
+                </div>
+              </div>
+            </div>
+
+            <div className="goal-modal-footer">
+              <button className="goal-btn-cancel" onClick={() => { resetForm(); setShowModal(false) }} disabled={isSaving}>
+                Anuluj
+              </button>
+              <button className="goal-btn-save" onClick={handleSave} disabled={isSaving || !name || !target}>
+                {isSaving ? (
+                  <>
+                    <Loader2 size={20} className="goal-spinner" />
+                    Zapisywanie...
+                  </>
+                ) : (
+                  'Zapisz'
+                )}
+              </button>
+            </div>
           </div>
         </div>
       )}

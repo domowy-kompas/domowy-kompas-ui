@@ -26,11 +26,12 @@ export function useGoalsData() {
   const [summary, setSummary] = useState<SavingsSummary | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [refreshTrigger, setRefreshTrigger] = useState(0)
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (!user) return
+    if (!user) return
 
+    const fetchData = async () => {
       try {
         setIsLoading(true)
         setError(null)
@@ -52,7 +53,7 @@ export function useGoalsData() {
     }
 
     fetchData()
-  }, [user])
+  }, [user, refreshTrigger])
 
-  return { goals, summary, isLoading, error }
+  return { goals, summary, isLoading, error, refreshGoals: () => setRefreshTrigger(t => t + 1) }
 }
