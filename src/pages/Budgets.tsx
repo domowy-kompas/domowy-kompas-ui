@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactElement } from 'react'
+import { useEffect, type ReactElement } from 'react'
 import { Link } from 'react-router-dom'
 import { trackEvent, trackPageView } from '../utils/analytics'
 import { useBudgetsData } from '../hooks/useBudgetsData'
@@ -7,14 +7,12 @@ import './Budgets.css'
 import { formatCurrency } from '../utils/format'
 
 // Icons
-import calendarIcon from '../assets/budgets/calendar.png'
 import foodIcon from '../assets/budgets/food.png'
 import homeIcon from '../assets/budgets/home.png'
 import entertainmentIcon from '../assets/budgets/entertainment.png'
 import healthIcon from '../assets/budgets/health.png'
 import transportIcon from '../assets/budgets/transport.png'
 import otherIcon from '../assets/budgets/other.png'
-import warningIcon from '../assets/budgets/warning.png'
 
 const CATEGORY_ICONS: Record<string, string> = {
   'Jedzenie': foodIcon,
@@ -29,18 +27,6 @@ export function Budgets(): ReactElement {
   useEffect(() => { trackPageView('budgets') }, [])
 
   const { isLoading, error, budgets, summary } = useBudgetsData()
-
-  const hasExceeded = budgets.some(b => b.spent > b.limit)
-  const prevExceeded = useRef(hasExceeded)
-
-  useEffect(() => {
-    if (hasExceeded && !prevExceeded.current) {
-      trackEvent('budget_status_exceeded')
-    }
-    prevExceeded.current = hasExceeded
-  }, [hasExceeded])
-
-  // use centralized formatter from utils
 
   const getStatusColor = (percentage: number) => {
     if (percentage >= 100) return 'red'
@@ -70,10 +56,6 @@ export function Budgets(): ReactElement {
           <h1>Twoje Budżety - Październik 2023</h1>
           <p>Przeglądaj i zarządzaj swoimi planami wydatków.</p>
         </div>
-        <button className="plan-month-btn" disabled={isLoading}>
-          <img src={calendarIcon} aria-hidden="true" />
-          Zaplanuj miesiąc
-        </button>
       </header>
 
       {isLoading ? (
@@ -83,16 +65,6 @@ export function Budgets(): ReactElement {
         </>
       ) : (
         <>
-          {hasExceeded && (
-            <div className="budget-alert">
-              <div className="alert-content">
-                <img src={warningIcon} alt="Ostrzeżenie" className="alert-icon" />
-                <span>Uwaga: Przekroczono zaplanowany budżet całkowity w niektórych kategoriach.</span>
-              </div>
-              <button className="fix-plan-btn">Napraw plan</button>
-            </div>
-          )}
-
           <section className="budgets-summary-grid">
             <div className="summary-card total">
               <span className="summary-label">Całkowity Budżet</span>
