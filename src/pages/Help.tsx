@@ -1,32 +1,10 @@
-import { type ReactElement, useState, useEffect } from 'react'
-import { Search, Rocket, Landmark, Shield, ChevronDown, ChevronUp, ArrowRight, Send } from 'lucide-react'
+import { type ReactElement, useState, useEffect, type FormEvent } from 'react'
+import { ChevronDown, ChevronUp, Send, Loader2 } from 'lucide-react'
 import { trackEvent, trackPageView } from '../utils/analytics'
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
+import { useNotification } from '../context/NotificationContext'
 import mailIcon from '../assets/help/mail.png'
 import chatIcon from '../assets/help/chat.png'
 import './Help.css'
-
-interface HelpTopicCardProps {
-  title: string
-  description: string
-  icon: ReactElement
-  variant: 'green' | 'blue' | 'peach'
-}
-
-function HelpTopicCard({ title, description, icon, variant }: HelpTopicCardProps): ReactElement {
-  return (
-    <div className="help-card" onClick={() => trackEvent('help_topic_viewed', { topic_name: title })}>
-      <div className={`help-card-icon-wrapper ${variant}`}>
-        {icon}
-      </div>
-      <div>
-        <h3 className="help-card-title">{title}</h3>
-        <p className="help-card-description">{description}</p>
-      </div>
-    </div>
-  )
-}
 
 interface FAQ {
   question: string
@@ -35,84 +13,89 @@ interface FAQ {
 
 const faqs: FAQ[] = [
   {
-    question: 'Jak dodać moje pierwsze konto bankowe?',
-    answer: 'Aby dodać pierwsze konto, przejdź do zakładki Panel główny i kliknij "Nowa transakcja" lub użyj opcji w Ustawieniach.'
+    question: 'Jak dodać nową transakcję?',
+    answer: 'Użyj przycisku "Nowa transakcja" w menu bocznym. Wybierz typ (wydatek lub dochód), wpisz kwotę, wybierz kategorię, metodę płatności i datę. Transakcja pojawi się na liście i wpłynie na Twoje budżety.'
   },
   {
-    question: 'Czy moje dane są widoczne dla pracowników?',
-    answer: 'Absolutnie nie. Wszystkie Twoje dane finansowe są szyfrowane end-to-end. Nasi pracownicy nie mają dostępu do Twoich transakcji ani sald. Korzystamy z tych samych standardów bezpieczeństwa co nowoczesna bankowość elektroniczna.'
+    question: 'Jak kontrolować wydatki?',
+    answer: 'Przejdź do zakładki Budżety. Zobaczysz podsumowanie (limit, wydano, pozostało) oraz kategorie z kolorowymi paskami postępu — zielony poniżej 90%, pomarańczowy przy 90–99%, czerwony po przekroczeniu limitu.'
   },
   {
-    question: 'Jak mogę wyeksportować raport do pliku PDF?',
-    answer: 'W zakładce Raporty znajdziesz przycisk "Eksportuj". Wybierz format PDF i odpowiedni zakres dat.'
+    question: 'Jak ustawić cel oszczędnościowy i śledzić postępy?',
+    answer: 'Wejdź w Cele oszczędnościowe, kliknij "Dodaj nowy cel". Podaj nazwę, kwotę docelową, termin i miesięczną składkę. Postęp zobaczysz zarówno na stronie celu, jak i na Panelu głównym.'
   },
   {
-    question: 'Czy mogę współdzielić budżet z partnerem?',
-    answer: 'Tak, funkcja współdzielenia budżetów jest dostępna w Ustawieniach Konta w sekcji "Rodzina i partnerzy".'
+    question: 'Jak przeglądać raporty finansowe?',
+    answer: 'W zakładce Raporty wybierz okres (miesiąc, kwartał lub rok). Zobaczysz wykres słupkowy przychodów i wydatków, wykres kołowy wydatków według kategorii oraz szczegółową analizę każdej kategorii.'
+  },
+  {
+    question: 'Jak zmienić ustawienia profilu lub dodać metodę płatności?',
+    answer: 'W Ustawieniach możesz edytować swoje dane, zmienić walutę i język. W zakładce Płatności dodasz metody płatności używane przy transakcjach.'
   }
 ]
 
 function FAQSection(): ReactElement {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(1)
-  const [isLoading, setIsLoading] = useState(true)
-
-  // Symulacja ładowania danych
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 2000)
-    return () => clearTimeout(timer)
-  }, [])
 
   return (
     <div className="faq-container">
       <div className="faq-header">
         <h2 className="faq-title">Najczęściej zadawane pytania</h2>
-        <button className="faq-see-all-btn" disabled={isLoading}>
-          Zobacz wszystkie <ArrowRight size={16} />
-        </button>
       </div>
       <div className="faq-list">
-        {isLoading ? (
-          <div style={{ padding: '24px 32px' }}>
-            <Skeleton count={4} height={60} style={{ marginBottom: '12px' }} baseColor="var(--tx-bg-color)" highlightColor="#ffffff" />
-          </div>
-        ) : (
-          faqs.map((faq, index) => {
-            const isExpanded = expandedIndex === index
-            return (
-              <div 
-                key={index} 
-                className={`faq-item ${isExpanded ? 'expanded' : ''}`}
+        {faqs.map((faq, index) => {
+          const isExpanded = expandedIndex === index
+          return (
+            <div 
+              key={index} 
+              className={`faq-item ${isExpanded ? 'expanded' : ''}`}
+            >
+              <button 
+                className="faq-question-btn"
+                onClick={() => {
+                  const next = isExpanded ? null : index
+                  setExpandedIndex(next)
+                  if (next !== null) {
+                    trackEvent('faq_expanded', { faq_index: index })
+                  }
+                }}
               >
-                <button 
-                  className="faq-question-btn"
-                  onClick={() => {
-                    const next = isExpanded ? null : index
-                    setExpandedIndex(next)
-                    if (next !== null) {
-                      trackEvent('faq_expanded', { faq_index: index })
-                    }
-                  }}
-                >
-                  <span>{faq.question}</span>
-                  {isExpanded ? <ChevronUp size={20} className="faq-icon" /> : <ChevronDown size={20} className="faq-icon-inactive" />}
-                </button>
-                <div className="faq-answer-wrapper">
-                  <div className="faq-answer">
-                    <p>{faq.answer}</p>
-                  </div>
+                <span>{faq.question}</span>
+                {isExpanded ? <ChevronUp size={20} className="faq-icon" /> : <ChevronDown size={20} className="faq-icon-inactive" />}
+              </button>
+              <div className="faq-answer-wrapper">
+                <div className="faq-answer">
+                  <p>{faq.answer}</p>
                 </div>
               </div>
-            )
-          })
-        )}
+            </div>
+          )
+        })}
       </div>
     </div>
   )
 }
 
 function ContactSection(): ReactElement {
+  const { showNotification } = useNotification()
+  const [name, setName] = useState('')
+  const [message, setMessage] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const isValid = name.trim().length > 0 && message.trim().length > 0
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    if (!isValid) return
+
+    setIsSubmitting(true)
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    showNotification('Wiadomość wysłana pomyślnie', 'success')
+    setName('')
+    setMessage('')
+    setIsSubmitting(false)
+  }
+
   return (
     <div className="contact-section">
       <div className="contact-info">
@@ -142,17 +125,42 @@ function ContactSection(): ReactElement {
       
       <div className="contact-form-card">
         <h3 className="contact-form-title">Napisz do nas</h3>
-        <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
+        <form className="contact-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="name">Twoje Imię</label>
-            <input type="text" id="name" placeholder="Jan Kowalski" className="help-input" />
+            <input
+              type="text"
+              id="name"
+              placeholder="Jan Kowalski"
+              className="help-input"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              disabled={isSubmitting}
+            />
           </div>
           <div className="form-group">
             <label htmlFor="message">Wiadomość</label>
-            <textarea id="message" placeholder="W czym możemy Ci pomóc?" className="help-textarea" rows={4}></textarea>
+            <textarea
+              id="message"
+              placeholder="W czym możemy Ci pomóc?"
+              className="help-textarea"
+              rows={4}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              disabled={isSubmitting}
+            />
           </div>
-          <button type="submit" className="contact-submit-btn">
-            Wyślij wiadomość <Send size={18} />
+          <button
+            type="submit"
+            className="contact-submit-btn"
+            disabled={isSubmitting || !isValid}
+          >
+            {isSubmitting ? (
+              <Loader2 size={18} className="spin" />
+            ) : (
+              <Send size={18} />
+            )}
+            {isSubmitting ? 'Wysyłanie...' : 'Wyślij wiadomość'}
           </button>
         </form>
       </div>
@@ -163,61 +171,10 @@ function ContactSection(): ReactElement {
 export function Help(): ReactElement {
   useEffect(() => { trackPageView('help') }, [])
 
-  const [searchQuery, setSearchQuery] = useState('')
-
-  const helpTopics: HelpTopicCardProps[] = [
-    {
-      title: 'Pierwsze kroki',
-      description: 'Naucz się podstaw zarządzania finansami w kilka minut.',
-      icon: <Rocket size={24} />,
-      variant: 'green'
-    },
-    {
-      title: 'Budżety',
-      description: 'Optymalizacja wydatków i planowanie oszczędności.',
-      icon: <Landmark size={24} />,
-      variant: 'blue'
-    },
-    {
-      title: 'Bezpieczeństwo',
-      description: 'Twoje dane są u nas bezpieczne. Dowiedz się jak je chronimy.',
-      icon: <Shield size={24} />,
-      variant: 'peach'
-    }
-  ]
-
-  const filteredTopics = helpTopics.filter(topic => 
-    topic.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    topic.description.toLowerCase().includes(searchQuery.toLowerCase())
-  )
-
   return (
     <div className="help-container">
       <div className="help-header">
         <h1 className="help-title">Centrum Pomocy</h1>
-      </div>
-
-      <div className="help-search-container">
-        <Search className="help-search-icon" size={20} />
-        <input 
-          type="text" 
-          className="help-search-input" 
-          placeholder="Szukaj pomocy..." 
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </div>
-
-      <div className="help-grid">
-        {filteredTopics.map((topic, index) => (
-          <HelpTopicCard 
-            key={index}
-            title={topic.title}
-            description={topic.description}
-            icon={topic.icon}
-            variant={topic.variant}
-          />
-        ))}
       </div>
 
       <FAQSection />
