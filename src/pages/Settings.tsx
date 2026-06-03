@@ -1,4 +1,4 @@
-import { useEffect, type ReactElement, useState } from 'react'
+import { useEffect, type ReactElement, useState, useRef } from 'react'
 import { trackEvent, trackPageView } from '../utils/analytics'
 import { Loader2 } from 'lucide-react'
 import { usePaymentMethods } from '../features/payments/hooks/usePaymentMethods'
@@ -64,6 +64,27 @@ export function Settings(): ReactElement {
   const { user, logout } = useAuth()
   const { showNotification } = useNotification()
 
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(() => localStorage.getItem('settings_avatar'))
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (file.size > 2 * 1024 * 1024) {
+      showNotification('Plik przekracza maksymalny rozmiar 2MB.', 'error')
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = () => {
+      const dataUrl = reader.result as string
+      setAvatarUrl(dataUrl)
+      localStorage.setItem('settings_avatar', dataUrl)
+    }
+    reader.readAsDataURL(file)
+  }
+
   const [initialCurrency] = useState(currency)
   const [initialLanguage] = useState(language)
   const hasChanges = currency !== initialCurrency || language !== initialLanguage
@@ -121,9 +142,15 @@ export function Settings(): ReactElement {
                 <h2 className="section-title">Informacje o profilu</h2>
                 <div className="profile-avatar-row">
                   <div className="avatar-wrapper">
-                    <div className="avatar-icon-placeholder"></div>
-                    <div className="avatar-icon-placeholder-body"></div>
-                    <button className="avatar-edit-btn" aria-label="Zmień zdjęcie">
+                    {avatarUrl ? (
+                      <img src={avatarUrl} alt="Zdjęcie profilowe" className="avatar-img" />
+                    ) : (
+                      <>
+                        <div className="avatar-icon-placeholder"></div>
+                        <div className="avatar-icon-placeholder-body"></div>
+                      </>
+                    )}
+                    <button className="avatar-edit-btn" aria-label="Zmień zdjęcie" onClick={() => fileInputRef.current?.click()}>
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
                       </svg>
@@ -132,7 +159,7 @@ export function Settings(): ReactElement {
                   <div className="profile-avatar-info">
                     <h3>Zdjęcie profilowe</h3>
                     <p>JPG, GIF lub PNG. Maksymalny rozmiar 2MB.</p>
-                    <button className="btn-link">Zmień zdjęcie</button>
+                    <button className="btn-link" onClick={() => fileInputRef.current?.click()}>Zmień zdjęcie</button>
                   </div>
                 </div>
                 
@@ -182,6 +209,14 @@ export function Settings(): ReactElement {
                 </button>
               </div>
             </div>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/gif,image/png"
+              style={{ display: 'none' }}
+              onChange={handleFileSelect}
+            />
 
             <div className="danger-zone">
               <div className="danger-zone-info">

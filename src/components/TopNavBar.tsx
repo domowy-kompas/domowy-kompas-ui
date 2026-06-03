@@ -15,6 +15,14 @@ const ROUTE_NAMES: Record<string, string> = {
 }
 
 function UserAvatar() {
+  const avatarUrl = localStorage.getItem('settings_avatar')
+  if (avatarUrl) {
+    return (
+      <div className="top-navbar-avatar">
+        <img src={avatarUrl} alt="Zdjęcie profilowe" className="top-navbar-avatar-img" />
+      </div>
+    )
+  }
   return (
     <div className="top-navbar-avatar">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
