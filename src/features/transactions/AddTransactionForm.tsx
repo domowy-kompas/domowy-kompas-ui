@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { useNotification } from '../../context/NotificationContext';
 import { useAuth } from '../../context/AuthContext';
+import { usePaymentMethods } from '../payments/hooks/usePaymentMethods';
 import { addTransaction } from '../../api/firestore';
 import { trackEvent } from '../../utils/analytics';
 import './AddTransactionForm.css';
@@ -30,7 +31,8 @@ export function AddTransactionForm(): ReactElement {
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('jedzenie');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-  const [account, setAccount] = useState('mBank');
+  const { methods } = usePaymentMethods()
+  const [selectedMethodId, setSelectedMethodId] = useState(methods[0]?.id ?? '');
   const [note, setNote] = useState('');
   const { user } = useAuth();
   const [isSaving, setIsSaving] = useState(false);
@@ -57,14 +59,16 @@ export function AddTransactionForm(): ReactElement {
 
       if (!user) throw new Error('User not authenticated');
 
+      const selectedMethod = methods.find(m => m.id === selectedMethodId)
+
       await addTransaction(user.uid, {
         date,
         time,
         title: note || (type === 'expense' ? 'Wydatek' : 'Dochód'),
         category: category.charAt(0).toUpperCase() + category.slice(1),
-        categoryIcon: category, // Simplified mapping
-        method: account,
-        methodIcon: 'credit-card', // Simplified mapping
+        categoryIcon: category,
+        method: selectedMethod?.name ?? '',
+        methodIcon: selectedMethod?.icon ?? 'credit-card',
         amount: amountValue
       });
 
@@ -194,12 +198,12 @@ export function AddTransactionForm(): ReactElement {
           <div className="select-wrapper">
             <select
               className="form-control"
-              value={account}
-              onChange={(e) => setAccount(e.target.value)}
+              value={selectedMethodId}
+              onChange={(e) => setSelectedMethodId(e.target.value)}
             >
-              <option>Główne Konto (mBank)</option>
-              <option>Karta Kredytowa</option>
-              <option>Gotówka</option>
+              {methods.map(m => (
+                <option key={m.id} value={m.id}>{m.name}</option>
+              ))}
             </select>
             <Wallet className="select-icon" size={18} />
           </div>
