@@ -52,8 +52,8 @@ export function LandingPage(): ReactElement {
                   <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
               </Link>
-              <Link to="#" className="btn-secondary">
-                Zobacz demo
+              <Link to="/login" className="btn-secondary">
+                Mam już konto
               </Link>
             </div>
 
