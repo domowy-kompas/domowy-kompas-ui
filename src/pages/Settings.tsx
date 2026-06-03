@@ -3,6 +3,8 @@ import { trackEvent, trackPageView } from '../utils/analytics'
 import { Loader2 } from 'lucide-react'
 import { usePaymentMethods } from '../features/payments/hooks/usePaymentMethods'
 import type { PaymentMethod } from '../features/payments/types'
+import { useAuth } from '../context/AuthContext'
+import { useNotification } from '../context/NotificationContext'
 import './Settings.css'
 
 function PaymentMethodIcon({ type }: { type: PaymentMethod['type'] }) {
@@ -44,6 +46,28 @@ export function Settings(): ReactElement {
   const [isSaving, setIsSaving] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null)
 
+  const [currency, setCurrency] = useState<string>(() => {
+    const stored = localStorage.getItem('settings_currency')
+    if (stored) return stored
+    localStorage.setItem('settings_currency', 'PLN')
+    return 'PLN'
+  })
+  const [language, setLanguage] = useState<string>(() => {
+    const stored = localStorage.getItem('settings_language')
+    if (stored) return stored
+    localStorage.setItem('settings_language', 'PL')
+    return 'PL'
+  })
+  const [isSavingProfile, setIsSavingProfile] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+
+  const { user, logout } = useAuth()
+  const { showNotification } = useNotification()
+
+  const [initialCurrency] = useState(currency)
+  const [initialLanguage] = useState(language)
+  const hasChanges = currency !== initialCurrency || language !== initialLanguage
+
   const tabs = ['Profil', 'Płatności']
 
   const handleAdd = async () => {
@@ -55,6 +79,16 @@ export function Settings(): ReactElement {
     trackEvent('payment_method_added')
     setNewName('')
     setIsSaving(false)
+  }
+
+  const handleSaveProfile = () => {
+    setIsSavingProfile(true)
+    localStorage.setItem('settings_currency', currency)
+    localStorage.setItem('settings_language', language)
+    setTimeout(() => {
+      setIsSavingProfile(false)
+      showNotification('Ustawienia zapisane', 'success')
+    }, 1000)
   }
 
   return (
@@ -105,11 +139,11 @@ export function Settings(): ReactElement {
                 <div className="settings-form-grid">
                   <div className="form-group">
                     <label>Imię i nazwisko</label>
-                    <input type="text" className="form-control" defaultValue="Jan Kowalski" />
+                    <input type="text" className="form-control" value={`${user?.name ?? ''} ${user?.surname ?? ''}`.trim()} disabled />
                   </div>
                   <div className="form-group">
                     <label>Adres e-mail</label>
-                    <input type="email" className="form-control" defaultValue="jan.kowalski@example.com" />
+                    <input type="email" className="form-control" value={user?.email ?? ''} disabled />
                   </div>
                 </div>
               </div>
@@ -119,7 +153,7 @@ export function Settings(): ReactElement {
                 <div className="settings-form-grid">
                   <div className="form-group">
                     <label>Waluta główna</label>
-                    <select className="form-control" defaultValue="PLN">
+                    <select className="form-control" value={currency} onChange={e => setCurrency(e.target.value)}>
                       <option value="PLN">PLN - Polski Złoty</option>
                       <option value="EUR">EUR - Euro</option>
                       <option value="USD">USD - Dolar amerykański</option>
@@ -127,7 +161,7 @@ export function Settings(): ReactElement {
                   </div>
                   <div className="form-group">
                     <label>Język aplikacji</label>
-                    <select className="form-control" defaultValue="PL">
+                    <select className="form-control" value={language} onChange={e => setLanguage(e.target.value)}>
                       <option value="PL">Polski</option>
                       <option value="EN">English</option>
                     </select>
@@ -136,12 +170,15 @@ export function Settings(): ReactElement {
               </div>
 
               <div className="settings-actions">
-                <button className="btn-secondary">Anuluj</button>
-                <button className="btn-primary">
-                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
-                  </svg>
-                  Zapisz zmiany
+                <button className="btn-primary" onClick={handleSaveProfile} disabled={isSavingProfile || !hasChanges}>
+                  {isSavingProfile ? (
+                    <Loader2 size={18} className="spinner" />
+                  ) : (
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                    </svg>
+                  )}
+                  {isSavingProfile ? 'Zapisywanie...' : 'Zapisz zmiany'}
                 </button>
               </div>
             </div>
@@ -160,7 +197,7 @@ export function Settings(): ReactElement {
                   <p className="danger-description">Usuń swoje konto i wszystkie powiązane dane finansowe na zawsze.</p>
                 </div>
               </div>
-              <button className="btn-danger">Usuń konto</button>
+              <button className="btn-danger" onClick={() => setShowDeleteConfirm(true)}>Usuń konto</button>
             </div>
           </>
         )}
@@ -238,6 +275,27 @@ export function Settings(): ReactElement {
                 <button className="btn-secondary" onClick={() => setDeleteTarget(null)}>Anuluj</button>
                 <button className="btn-danger modal-confirm" onClick={() => { removeMethod(deleteTarget); trackEvent('payment_method_removed'); setDeleteTarget(null) }}>
                   Usuń
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showDeleteConfirm && (
+          <div className="modal-overlay" onClick={() => setShowDeleteConfirm(false)}>
+            <div className="modal-box" onClick={e => e.stopPropagation()}>
+              <h3 className="modal-title">Usunąć konto?</h3>
+              <p className="modal-text">
+                Czy na pewno chcesz usunąć swoje konto? Tej operacji nie można cofnąć.
+              </p>
+              <div className="modal-actions">
+                <button className="btn-secondary" onClick={() => setShowDeleteConfirm(false)}>Anuluj</button>
+                <button className="btn-danger modal-confirm" onClick={() => {
+                  localStorage.removeItem('settings_currency')
+                  localStorage.removeItem('settings_language')
+                  logout()
+                }}>
+                  Tak, usuń konto
                 </button>
               </div>
             </div>

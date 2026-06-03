@@ -339,6 +339,13 @@ select.form-control {
   padding-right: 40px;
 }
 
+.form-control:disabled {
+  background: #ebefed;
+  color: #3e4947;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
 /* Regional Section */
 .regional-section {
   display: flex;
