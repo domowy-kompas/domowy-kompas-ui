@@ -3,6 +3,15 @@
 Frontend aplikacji **Domowy Kompas** — osobisty asystent finansów domowych.
 Oparty o **React 19 + TypeScript + Vite 8**, z Firebase (Auth, Firestore, Analytics).
 
+**🔗 Aplikacja dostępna pod adresem:** [domowy-kompas.web.app](https://domowy-kompas.web.app/)
+
+### Konto testowe
+
+| Pole | Wartość |
+|------|---------|
+| Email | `jankowalski@gmail.com` |
+| Hasło | `Test1234` |
+
 ## 🚀 Uruchomienie lokalne
 
 ```bash
