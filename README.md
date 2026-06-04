@@ -1,7 +1,7 @@
 # Domowy Kompas UI
 
-Frontend aplikacji **Domowy Kompas** oparty o **React 19 + TypeScript + Vite 8**.
-Projekt korzysta z **Firebase Authentication**, **Cloud Firestore** oraz **Firebase Analytics**.
+Frontend aplikacji **Domowy Kompas** — osobisty asystent finansów domowych.
+Oparty o **React 19 + TypeScript + Vite 8**, z Firebase (Auth, Firestore, Analytics).
 
 ## 🚀 Uruchomienie lokalne
 
@@ -26,45 +26,32 @@ VITE_FIREBASE_APP_ID=
 VITE_FIREBASE_MEASUREMENT_ID=
 ```
 
-W trybie produkcyjnym wymagane są: `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`.
-Brak `VITE_FIREBASE_MEASUREMENT_ID` wyłącza jedynie analitykę (bez wpływu na działanie aplikacji).
+W trybie produkcyjnym wymagane są `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`.
+Brak `VITE_FIREBASE_MEASUREMENT_ID` wyłącza jedynie analitykę.
 
 ## 📦 Dostępne skrypty
 
-- `npm run dev` — uruchomienie środowiska developerskiego (Vite)
-- `npm run build` — build produkcyjny (`tsc -b && vite build`)
-- `npm run preview` — podgląd buildu
-- `npm run lint` — linting ESLint
-- `npm run test` — testy (`vitest run`)
-- `npm run test:watch` — testy w trybie watch
+| Komenda | Opis |
+|---------|------|
+| `npm run dev` | Dev server (Vite HMR, `localhost:5173`) |
+| `npm run build` | `tsc -b && vite build` → `dist/` |
+| `npm run preview` | Podgląd buildu |
+| `npm run lint` | ESLint (flat config) |
+| `npm run test` | `vitest run` |
+| `npm run test:watch` | `vitest` (watch) |
 
-## 🧱 Architektura i struktura
+## 📖 Dokumentacja
 
-- Routing i bramy dostępu: `src/App.tsx` (`PublicOnlyRoute`, `ProtectedRoute`)
-- Kontekst autoryzacji: `src/context/AuthContext.tsx`
-- Warstwa danych Firebase: `src/api/auth.ts`, `src/api/firestore.ts`
-- Konfiguracja Firebase: `src/config/firebase.ts`
-- Moduły domenowe: `src/features/*`
-- Strony aplikacji: `src/pages/*`
-
-## 🎨 UI/UX
-
-- Layout aplikacji oparty o App Shell (`Layout`) z wydzielonym obszarem scrollowania treści.
-- Preferowane są **Skeleton Screens** (`react-loading-skeleton`) zamiast prostych spinnerów.
-- Stylizacja oparta o **Vanilla CSS** i zmienne globalne z `src/index.css`.
-
-## 📊 Analityka
-
-Helpery analityczne:
-
-- `trackEvent(name, params?)`
-- `trackPageView(pageName)`
-
-Szczegóły zdarzeń i zasady użycia znajdują się w [`docs/analytics.md`](docs/analytics.md).
+| Dokument | Opis |
+|----------|------|
+| [Zrzuty ekranu](docs/screenshots.md) | Wygląd poszczególnych widoków aplikacji |
+| [Analityka (Google Analytics)](docs/analytics.md) | Zdarzenia, konfiguracja, debugowanie |
+| [Wyniki Hotjar](docs/hotjar.md) | Mapy ciepła, nagrania sesji, feedback |
+| [Przewodnik dla agenta AI (struktura, konwencje)](AGENTS.md) | Architektura, routing, data flow, konwencje kodu |
 
 ## ☁️ CI/CD
 
-Repozytorium posiada workflowy GitHub Actions wdrażające frontend na Firebase Hosting:
+Workflowy GitHub Actions wdrażające frontend na Firebase Hosting:
 
 - preview dla Pull Requestów
 - deployment na `master`

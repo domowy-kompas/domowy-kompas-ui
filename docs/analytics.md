@@ -1,26 +1,38 @@
-# Analytics
+# Analityka (Google Analytics)
 
-Firebase Analytics tracking for Domowy Kompas.
+Firebase Analytics — śledzenie zdarzeń w Domowy Kompas.
 
-## Setup
+## Konfiguracja
 
-Analytics is initialized in `src/config/firebase.ts`. It requires `VITE_FIREBASE_MEASUREMENT_ID` to be set in the environment. If the variable is missing, analytics is unavailable (app behaves normally).
+Analytics jest inicjalizowany w `src/config/firebase.ts`. Wymaga zmiennej `VITE_FIREBASE_MEASUREMENT_ID` w środowisku. Jeśli zmienna nie istnieje, analityka jest niedostępna (aplikacja działa normalnie).
 
 ## Helper API
 
-Defined in `src/utils/analytics.ts`.
+Zdefiniowane w `src/utils/analytics.ts`.
 
 ```ts
 trackEvent(eventName: string, params?: Record<string, unknown>)
-trackPageView(pageName: string)  // fires page_view_{pageName}
+trackPageView(pageName: string)  // wywołuje page_view_{pageName}
 ```
 
-Both are error-safe — they silently return if Analytics is unavailable or blocked.
+Obie funkcje są bezpieczne — po cichu kończą działanie, jeśli Analytics jest niedostępny lub zablokowany.
 
-## Page View Events
+## Zrzuty ekranu z panelu Firebase
 
-| Component | Event | Phase |
-|-----------|-------|-------|
+### Przegląd — kluczowe metryki
+
+![Przegląd Analytics](../screenshots/analytics-overview.png)
+*Liczba użytkowników, sesji, średni czas zaangażowania.*
+
+### Zdarzenia — najpopularniejsze akcje
+
+![Zdarzenia](../screenshots/analytics-events.png)
+*Ranking zdarzeń: page_view, user_login, transaction_created itd.*
+
+## Zdarzenia — wyświetlenia stron
+
+| Komponent | Zdarzenie | Status |
+|-----------|-----------|--------|
 | `LandingPage` | `page_view_landing` | ✅ |
 | `Dashboard` | `page_view_dashboard` | ✅ |
 | `TransactionsPage` | `page_view_transactions` | ✅ |
@@ -30,10 +42,10 @@ Both are error-safe — they silently return if Analytics is unavailable or bloc
 | `Settings` | `page_view_settings` | ✅ |
 | `Help` | `page_view_help` | ✅ |
 
-## Interaction Events
+## Zdarzenia — interakcje
 
-| Event | Location | Status |
-|-------|----------|--------|
+| Zdarzenie | Miejsce | Status |
+|-----------|---------|--------|
 | `user_login` | `LoginCard` | ✅ |
 | `user_logout` | `AuthContext` | ✅ |
 | `user_registration_started` | `Register` | ✅ |
@@ -54,24 +66,14 @@ Both are error-safe — they silently return if Analytics is unavailable or bloc
 | `transaction_save_failed` | `AddTransactionForm` | ✅ |
 | `data_load_error` | Dashboard, Budgets, Goals, Reports | ✅ |
 
-## Using an Event
+## Użycie w kodzie
 
 ```ts
 import { trackEvent } from '../utils/analytics'
 
-// Simple event
+// Proste zdarzenie
 trackEvent('user_login')
 
-// With params (no PII!)
+// Z parametrami (bez PII!)
 trackEvent('transaction_created', { category: 'food' })
 ```
-
-## Rules
-
-- **No PII** — never send names, emails, addresses, amounts, or sensitive data
-- **Fire once** — use `useEffect([], [])` for page views, avoid re-fires
-- **Graceful degradation** — all calls are wrapped in try/catch; missing `MEASUREMENT_ID` is handled silently
-
-## Debugging
-
-In development, open **Analytics DebugView** in the Firebase console to see events live. You can also inspect network requests for `google-analytics.com/g/collect` calls in the browser DevTools.
