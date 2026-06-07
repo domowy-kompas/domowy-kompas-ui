@@ -40,7 +40,7 @@ export function Budgets(): ReactElement {
       <div className="budgets-container">
         <header className="budgets-header">
           <div className="budgets-title-section">
-            <h1>Twoje Budżety - Październik 2023</h1>
+            <h1>Twoje Budżety - {new Intl.DateTimeFormat('pl-PL', { month: 'long', year: 'numeric' }).format(new Date()).replace(/^./, str => str.toUpperCase())}</h1>
             <p>Przeglądaj i zarządzaj swoimi planami wydatków.</p>
           </div>
         </header>
@@ -53,7 +53,7 @@ export function Budgets(): ReactElement {
     <div className="budgets-container">
       <header className="budgets-header">
         <div className="budgets-title-section">
-          <h1>Twoje Budżety - Październik 2023</h1>
+          <h1>Twoje Budżety - {new Intl.DateTimeFormat('pl-PL', { month: 'long', year: 'numeric' }).format(new Date()).replace(/^./, str => str.toUpperCase())}</h1>
           <p>Przeglądaj i zarządzaj swoimi planami wydatków.</p>
         </div>
       </header>
@@ -103,7 +103,7 @@ export function Budgets(): ReactElement {
                     <div className="category-icon-bg">
                       <img src={CATEGORY_ICONS[budget.name] || otherIcon} alt={budget.name} />
                     </div>
-                    <Link to={`/budgets/${budget.id}`} className="details-link">Szczegóły</Link>
+                    <Link to={`/transactions?period=current&category=${encodeURIComponent(budget.name)}`} className="details-link">Szczegóły</Link>
                   </div>
                   
                   <div className="category-info">

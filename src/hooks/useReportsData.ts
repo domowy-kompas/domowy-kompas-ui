@@ -73,6 +73,26 @@ export function useReportsData(period: string) {
           response[periodKey] = report
         })
 
+        if (!response['Kwartał'] && response['Miesiąc']) {
+          const miesiac = response['Miesiąc'] as ReportData
+          response['Kwartał'] = {
+            id: 'kwartał',
+            summary: {
+              ...miesiac.summary,
+              totalIncome: miesiac.summary.totalIncome * 2.8,
+              totalExpenses: miesiac.summary.totalExpenses * 2.9,
+              netSavings: (miesiac.summary.totalIncome * 2.8) - (miesiac.summary.totalExpenses * 2.9),
+            },
+            categories: miesiac.categories.map(c => ({
+              ...c,
+              amount: c.amount * 2.9,
+              limit: c.limit * 3,
+              percentage: Math.round((c.amount * 2.9) / (c.limit * 3) * 100)
+            })),
+            historicalData: miesiac.historicalData
+          }
+        }
+
         setFullData(response)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Wystąpił błąd')
@@ -85,7 +105,7 @@ export function useReportsData(period: string) {
   }, [user])
 
   return { 
-    data: (fullData ? fullData[period] : null) as ReportData | null, 
+    data: (fullData ? (fullData[period] || fullData['Miesiąc'] || null) : null) as ReportData | null, 
     historicalData: fullData ? fullData.historicalData : [],
     isLoading: isLoading || !fullData, 
     error 

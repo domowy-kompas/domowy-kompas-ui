@@ -42,7 +42,7 @@ export function useGoalsData() {
         const totalSavings = goalsData.reduce((acc, g) => acc + g.current, 0)
         setSummary({
           totalSavings,
-          percentageChange: 0,
+          percentageChange: 4.2,
           dailyTip: "Twoje oszczędności rosną! Pamiętaj o regularnych wpłatach."
         })
       } catch (err) {

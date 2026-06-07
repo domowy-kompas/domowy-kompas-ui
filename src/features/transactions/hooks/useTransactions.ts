@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { getTransactions, getBudgets } from '../../../api/firestore'
 import { useAuth } from '../../../context/AuthContext'
 import type { Transaction, TransactionsSummary, BudgetStatus } from '../types'
 
 export function useTransactions() {
   const { user } = useAuth()
+  const [searchParams] = useSearchParams()
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -12,10 +14,13 @@ export function useTransactions() {
   const [summary, setSummary] = useState<TransactionsSummary | null>(null)
   const [budget, setBudget] = useState<BudgetStatus | null>(null)
 
+  const initialPeriod = searchParams.get('period') === 'current' ? 'Ten miesiąc' : 'Wszystkie'
+  const initialCategory = searchParams.get('category') || 'Wszystkie'
+
   const [filters, setFilters] = useState({
     search: '',
-    period: 'Wszystkie',
-    category: 'Wszystkie',
+    period: initialPeriod,
+    category: initialCategory,
     type: 'Wszystkie' // Wszystkie / Wydatki
   })
   const [page, setPage] = useState(1)
@@ -65,7 +70,7 @@ export function useTransactions() {
 
   // Frontend Filtering
   const filteredTransactions = useMemo(() => {
-    const now = new Date('2026-04-29') // Hardcoded current date for consistent mock experience
+    const now = new Date() // Use actual current date
     const currentYear = now.getFullYear()
     const currentMonth = now.getMonth()
 

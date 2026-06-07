@@ -15,13 +15,15 @@ import transportIcon from '../assets/budgets/transport.png'
 import foodIcon from '../assets/budgets/food.png'
 import entertainmentIcon from '../assets/budgets/entertainment.png'
 import otherIcon from '../assets/budgets/other.png'
+import healthIcon from '../assets/budgets/health.png'
 
 const ICON_MAP: Record<string, string> = {
   home: homeIcon,
   utensils: foodIcon,
   film: entertainmentIcon,
   car: transportIcon,
-  circle: otherIcon
+  circle: otherIcon,
+  heart: healthIcon
 }
 
 export function Reports(): ReactElement {
@@ -143,8 +145,8 @@ export function Reports(): ReactElement {
                     dataKey="amount"
                     stroke="none"
                   >
-                    {data?.categories.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    {data?.categories?.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={['#005C55', '#1D8A82', '#41B3A9', '#78D6CE', '#B3EBE5', '#E6FAF8'][index % 6]} />
                     ))}
                   </Pie>
                   <Tooltip formatter={(value: number | string | readonly (number | string)[] | undefined) => formatCurrency(Number(value))} />
@@ -157,9 +159,9 @@ export function Reports(): ReactElement {
             </div>
 
             <div className="custom-legend">
-              {data?.categories.map((cat, index) => (
+              {data?.categories?.map((cat, index) => (
                 <div key={index} className="legend-item">
-                  <div className="legend-dot" style={{ backgroundColor: cat.color }}></div>
+                  <div className="legend-dot" style={{ backgroundColor: ['#005C55', '#1D8A82', '#41B3A9', '#78D6CE', '#B3EBE5', '#E6FAF8'][index % 6] }}></div>
                   <div className="legend-info">
                     <span className="legend-name">{cat.name.split(' ')[0]}</span>
                     <span className="legend-details">{cat.percentage}% • {formatCurrency(cat.amount)}</span>
@@ -176,7 +178,7 @@ export function Reports(): ReactElement {
               <button style={{ background: 'none', border: 'none', color: '#005C55', fontWeight: 700, fontSize: '14px', cursor: 'pointer' }}>Szczegóły</button>
             </div>
             <div className="analysis-list">
-              {data?.categories.map((cat, index) => (
+              {data?.categories?.map((cat, index) => (
                 <div key={index} className="analysis-item">
                   <div className="category-icon-box">
                     <img src={ICON_MAP[cat.icon]} aria-hidden="true" />
@@ -189,7 +191,7 @@ export function Reports(): ReactElement {
                     <div className="analysis-progress-bg">
                       <div 
                         className="analysis-progress-fill" 
-                        style={{ width: `${cat.percentage}%`, background: cat.color }}
+                        style={{ width: `${cat.percentage}%`, background: ['#005C55', '#1D8A82', '#41B3A9', '#78D6CE', '#B3EBE5', '#E6FAF8'][index % 6] }}
                       ></div>
                     </div>
                     <div className="analysis-footer">

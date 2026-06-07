@@ -1,5 +1,7 @@
 import { useCallback, type ReactElement } from 'react'
 import { trackEvent } from '../../../utils/analytics'
+import { useBudgetsData } from '../../../hooks/useBudgetsData'
+
 interface TransactionsHeaderProps {
   filters: {
     search: string
@@ -11,6 +13,7 @@ interface TransactionsHeaderProps {
 }
 
 export function TransactionsHeader({ filters, updateFilters }: TransactionsHeaderProps): ReactElement {
+  const { budgets } = useBudgetsData()
   const fireFilterEvent = useCallback(() => {
     trackEvent('transaction_filtered', {
       category: filters.category,
@@ -78,11 +81,10 @@ export function TransactionsHeader({ filters, updateFilters }: TransactionsHeade
               fireFilterEvent()
             }}
           >
-            <option>Wszystkie</option>
-            <option>Zakupy</option>
-            <option>Dom</option>
-            <option>Rozrywka</option>
-            <option>Praca</option>
+            <option value="Wszystkie">Wszystkie</option>
+            {budgets.map(b => (
+              <option key={b.id} value={b.name}>{b.name}</option>
+            ))}
           </select>
         </div>
       </div>

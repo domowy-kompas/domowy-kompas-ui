@@ -17,6 +17,7 @@ import {
 import { useNotification } from '../../context/NotificationContext';
 import { useAuth } from '../../context/AuthContext';
 import { usePaymentMethods } from '../payments/hooks/usePaymentMethods';
+import { useBudgetsData } from '../../hooks/useBudgetsData';
 import { addTransaction } from '../../api/firestore';
 import { trackEvent } from '../../utils/analytics';
 import './AddTransactionForm.css';
@@ -29,7 +30,7 @@ export function AddTransactionForm(): ReactElement {
 
   const [type, setType] = useState<TransactionType>('expense');
   const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState('jedzenie');
+  const [category, setCategory] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const { methods } = usePaymentMethods()
   const [selectedMethodId, setSelectedMethodId] = useState(methods[0]?.id ?? '');
@@ -37,13 +38,36 @@ export function AddTransactionForm(): ReactElement {
   const { user } = useAuth();
   const [isSaving, setIsSaving] = useState(false);
 
-  const quickCategories = [
-    { id: 'Zakupy', value: 'zakupy', icon: <ShoppingBag size={16} /> },
-    { id: 'Jedzenie', value: 'jedzenie', icon: <Utensils size={16} /> },
-    { id: 'Paliwo', value: 'paliwo', icon: <Fuel size={16} /> },
-    { id: 'Czynsz', value: 'czynsz', icon: <Home size={16} /> },
-    { id: 'Inne', value: 'inne', icon: <MoreHorizontal size={16} /> },
-  ];
+  const { budgets } = useBudgetsData();
+
+  const getCategoryIconStr = (catName: string) => {
+    const map: Record<string, string> = {
+      'jedzenie': 'utensils',
+      'dom': 'home',
+      'transport': 'car',
+      'rozrywka': 'film',
+      'zdrowie': 'heart',
+      'inne': 'circle'
+    };
+    return map[catName.toLowerCase()] || 'circle';
+  };
+
+  const getCategoryLucideIcon = (catName: string) => {
+    const map: Record<string, ReactElement> = {
+      'jedzenie': <Utensils size={16} />,
+      'dom': <Home size={16} />,
+      'transport': <Fuel size={16} />,
+      'rozrywka': <ShoppingBag size={16} />,
+      'inne': <MoreHorizontal size={16} />
+    };
+    return map[catName.toLowerCase()] || <MoreHorizontal size={16} />;
+  };
+
+  const quickCategories = budgets.slice(0, 5).map(b => ({
+    id: b.name,
+    value: b.name,
+    icon: getCategoryLucideIcon(b.name)
+  }));
 
   const isValid = category !== '' && date !== '' && parseFloat(amount) > 0;
 
@@ -65,8 +89,8 @@ export function AddTransactionForm(): ReactElement {
         date,
         time,
         title: note || (type === 'expense' ? 'Wydatek' : 'Dochód'),
-        category: category.charAt(0).toUpperCase() + category.slice(1),
-        categoryIcon: category,
+        category: category,
+        categoryIcon: getCategoryIconStr(category),
         method: selectedMethod?.name ?? '',
         methodIcon: selectedMethod?.icon ?? 'credit-card',
         amount: amountValue
@@ -168,12 +192,11 @@ export function AddTransactionForm(): ReactElement {
                 onChange={(e) => setCategory(e.target.value)}
               >
                 <option value="" disabled>Wybierz kategorię</option>
-                {quickCategories.map(cat => (
-                  <option key={cat.value} value={cat.value}>
-                    {cat.id}
+                {budgets.map(b => (
+                  <option key={b.id} value={b.name}>
+                    {b.name}
                   </option>
                 ))}
-                <option value="rozrywka">Rozrywka</option>
               </select>
               <ChevronDown className="select-icon" size={18} />
             </div>
