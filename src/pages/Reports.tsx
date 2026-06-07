@@ -145,7 +145,7 @@ export function Reports(): ReactElement {
                     dataKey="amount"
                     stroke="none"
                   >
-                    {data?.categories?.map((entry, index) => (
+                    {data?.categories?.map((_, index) => (
                       <Cell key={`cell-${index}`} fill={['#005C55', '#1D8A82', '#41B3A9', '#78D6CE', '#B3EBE5', '#E6FAF8'][index % 6]} />
                     ))}
                   </Pie>
